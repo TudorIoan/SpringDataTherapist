@@ -9,8 +9,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.core.view.MenuHost
@@ -27,7 +25,6 @@ import net.abaresults.progresspath.R
 import net.abaresults.progresspath.databinding.FragmentKidsBinding
 import net.abaresults.progresspath.model.Kid
 import net.abaresults.progresspath.model.UserType
-import net.abaresults.progresspath.view.objectives.ObjectivesAction
 import java.io.File
 import java.io.FileOutputStream
 
@@ -83,8 +80,7 @@ class KidsFragment : BaseFragment() {
         }
 
         viewModel.userType.observe(viewLifecycleOwner) { userType ->
-            kidsAdapter.userType = userType
-            binding.fabAddKid.isVisible = userType == UserType.COORDINATOR
+            binding.fabAddKid.isVisible = false
         }
     }
 
@@ -94,12 +90,6 @@ class KidsFragment : BaseFragment() {
         kidsAdapter = KidsAdapter(
             onItemClicked = { kid ->
                 viewModel.takeAction(KidsAction.KidClicked(kid))
-            },
-            onItemEdit = { kid ->
-                showEditDialog(kid)
-            },
-            onItemRemove = { kid ->
-                showRemoveDialog(kid)
             },
             onGenerateKidWorksheet = {
                 viewModel.takeAction(KidsAction.GenerateKidWorksheet(it))
@@ -111,9 +101,7 @@ class KidsFragment : BaseFragment() {
             adapter = kidsAdapter
         }
 
-        binding.fabAddKid.setOnClickListener {
-            findNavController().navigate(R.id.addKidFragment)
-        }
+        binding.fabAddKid.isVisible = false
     }
 
     private fun handleContentLoaded(kids: List<Kid>, userType: UserType) {
@@ -129,28 +117,13 @@ class KidsFragment : BaseFragment() {
                 menuInflater.inflate(R.menu.clinics_toolbar_menu, menu)
 
                 val coordinatorItem = menu.findItem(R.id.action_coordinator)
-                val therapistsItem = menu.findItem(R.id.action_therapists)
-
-                when (userType) {
-                    UserType.COORDINATOR -> {
-                        coordinatorItem?.isVisible = false
-                        therapistsItem?.isVisible = true
-                    }
-                    UserType.THERAPIST -> {
-                        coordinatorItem?.isVisible = true
-                        therapistsItem?.isVisible = false
-                    }
-                }
+                coordinatorItem?.isVisible = true
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_coordinator -> {
                         findNavController().navigate(R.id.coordinatorFragment)
-                        true
-                    }
-                    R.id.action_therapists -> {
-                        findNavController().navigate(R.id.therapistsFragment)
                         true
                     }
                     else -> false
@@ -210,28 +183,6 @@ class KidsFragment : BaseFragment() {
 
     private fun hideLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.GONE }
 
-    private fun showEditDialog(kid: Kid) {
-        val editText = EditText(requireContext()).apply {
-            setText(kid.name)
-            hint = "Kid name"
-        }
-        val container = LinearLayout(requireContext()).apply {
-            setPadding(48, 0, 48, 0)
-            addView(editText)
-        }
-        AlertDialog.Builder(requireContext())
-            .setTitle("Edit Kid")
-            .setView(container)
-            .setPositiveButton("Save") { _, _ ->
-                val newName = editText.text.toString().trim()
-                if (newName.isNotEmpty()) {
-                    viewModel.takeAction(KidsAction.UpdateKidName(kid.copy(name = newName)))
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
     private fun showInsufficientActiveItemsDialog(objectiveNames: List<String>) {
         val list = objectiveNames.joinToString("\n") { "• $it" }
         AlertDialog.Builder(requireContext())
@@ -241,14 +192,4 @@ class KidsFragment : BaseFragment() {
             .show()
     }
 
-    private fun showRemoveDialog(kid: Kid) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Remove Kid")
-            .setMessage("Are you sure you want to remove ${kid.name}?")
-            .setPositiveButton("Remove") { _, _ ->
-                viewModel.takeAction(KidsAction.RemoveKid(kid))
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
 }

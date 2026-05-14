@@ -7,11 +7,6 @@
         android:title="Clinics" />
 
     <item
-        android:id="@+id/objLibraryFragment"
-        android:icon="@drawable/ic_obj_library"
-        android:title="Objective Library" />
-
-    <item
         android:id="@+id/myAccountFragment"
         android:icon="@drawable/ic_account"
         android:title="My Account" />

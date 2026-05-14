@@ -8,10 +8,4 @@
         android:title="Coordinator"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_therapists"
-        android:icon="@drawable/ic_therapists"
-        android:title="Therapists"
-        app:showAsAction="always" />
-
 </menu>

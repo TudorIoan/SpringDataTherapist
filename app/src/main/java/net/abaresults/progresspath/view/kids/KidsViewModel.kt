@@ -25,7 +25,6 @@ import net.abaresults.progresspath.repo.KidObjectiveRepository
 import net.abaresults.progresspath.repo.KidRepository
 import net.abaresults.progresspath.repo.ObjectiveRepository
 import net.abaresults.progresspath.repo.OrgRepository
-import net.abaresults.progresspath.repo.TherapistRepository
 import net.abaresults.progresspath.repo.UserRepository
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
@@ -41,7 +40,6 @@ class KidsViewModel @Inject constructor(
     private val kidObjectiveRepo: KidObjectiveRepository,
     private val orgRepo: OrgRepository,
     private val userRepo: UserRepository,
-    private val therapistRepo: TherapistRepository,
     @ApplicationContext private val context: Context
 )  : ViewModel() {
     private val _state = MutableLiveData<KidsState>()
@@ -60,8 +58,6 @@ class KidsViewModel @Inject constructor(
         when (action) {
             is KidsAction.Start -> handleStart()
             is KidsAction.KidClicked -> handleKidClicked(action.kid)
-            is KidsAction.RemoveKid -> handleRemoveKid(action.kid)
-            is KidsAction.UpdateKidName -> handleUpdateKidName(action.kid)
             is KidsAction.GenerateKidWorksheet -> handleGenerateKidWorksheet(action.kid)
         }
     }
@@ -72,28 +68,18 @@ class KidsViewModel @Inject constructor(
 
     private fun handleStart() {
         _title.value = orgRepo.requireSelectedClinic().name
-        _userType.value = UserType.fromString(userRepo.requireUserDetails().userType)
+        _userType.value = UserType.THERAPIST
 
         // Reset selected clinic to reset selected Kid and Objective
         orgRepo.setSelectedClinic(orgRepo.requireSelectedClinic())
 
         update(KidsState.Loading)
         viewModelScope.launch {
-            // Cache therapist users for coordinator to avoid per-item Firestore calls
-            if (_userType.value == UserType.COORDINATOR) {
-                therapistRepo.fetchTherapistsForClinic(orgRepo.requireSelectedClinic().id)
-                    .onSuccess { userRepo.therapistUsers = it }
-            }
-
-            val result = if (_userType.value == UserType.THERAPIST ) {
-                kidRepo.fetchAllKidsForClinicAndTherapist(orgRepo.requireSelectedClinic().id, userRepo.requireUserDetails().ownerUid)
-            } else {
-                kidRepo.fetchAllKidsForClinic(orgRepo.requireSelectedClinic().id)
-            }
+            val result = kidRepo.fetchAllKidsForClinicAndTherapist(orgRepo.requireSelectedClinic().id, userRepo.requireUserDetails().ownerUid)
             result.onSuccess {
                 kidsList.clear()
                 kidsList.addAll(it)
-                update(KidsState.ContentLoaded(kidsList, UserType.fromString(userRepo.requireUserDetails().userType)))
+                update(KidsState.ContentLoaded(kidsList, UserType.THERAPIST))
             }.onFailure { exception ->
                 update(KidsState.Error(exception.message ?: "Error"))
             }
@@ -104,35 +90,6 @@ class KidsViewModel @Inject constructor(
         orgRepo.setSelectedKid(kid)
         update(KidsState.GoToObjectives)
         update(KidsState.Idle)
-    }
-
-    private fun handleRemoveKid(kid: Kid) {
-        update(KidsState.Loading)
-        viewModelScope.launch {
-            val result = kidRepo.removeKid(kid)
-            result.onSuccess {
-                kidsList.removeIf { it.id == kid.id }
-                update(KidsState.ContentLoaded(kidsList, _userType.value!!))
-            }.onFailure { exception ->
-                update(KidsState.Error(exception.message ?: "Error"))
-            }
-        }
-    }
-
-    private fun handleUpdateKidName(kid: Kid) {
-        update(KidsState.Loading)
-        viewModelScope.launch {
-            val result = kidRepo.updateKid(kid)
-            result.onSuccess {
-                val index = kidsList.indexOfFirst { it.id == kid.id }
-                if (index != -1) {
-                    kidsList[index] = kid
-                }
-                update(KidsState.ContentLoaded(kidsList, _userType.value!!))
-            }.onFailure { exception ->
-                update(KidsState.Error(exception.message ?: "Error"))
-            }
-        }
     }
 
     private fun handleGenerateKidWorksheet(kid: Kid) {

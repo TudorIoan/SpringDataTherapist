@@ -10,10 +10,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import net.abaresults.progresspath.BuildConfig
 import net.abaresults.progresspath.R
 import net.abaresults.progresspath.databinding.ActivityMainBinding
-import net.abaresults.progresspath.model.UserType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,14 +53,6 @@ class MainActivity : AppCompatActivity() {
                     navController.popBackStack(R.id.clinicsFragment, false)
                     true
                 }
-                R.id.objLibraryFragment -> {
-                    if (appUserType() != UserType.COORDINATOR) {
-                        return@setOnItemSelectedListener false
-                    }
-                    navController.popBackStack(R.id.clinicsFragment, false)
-                    navController.navigate(R.id.objLibraryFragment)
-                    true
-                }
                 R.id.myAccountFragment -> {
                     navController.popBackStack(R.id.clinicsFragment, false)
                     navController.navigate(R.id.myAccountFragment)
@@ -91,19 +81,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleAuthStatusUpdated(isLoggedIn: Boolean) {
         setupNavigation(isLoggedIn)
-        configureNavigationForUserType(appUserType())
-    }
-
-    private fun appUserType(): UserType {
-        return when (BuildConfig.SPRINGDATA_APP_ROLE) {
-            "coordinator" -> UserType.COORDINATOR
-            "therapist" -> UserType.THERAPIST
-            else -> UserType.THERAPIST
-        }
-    }
-
-    private fun configureNavigationForUserType(userType: UserType) {
-        binding.bottomNavigationView.menu.findItem(R.id.objLibraryFragment).isVisible = userType == UserType.COORDINATOR
     }
 
     fun updateBottomNav() {

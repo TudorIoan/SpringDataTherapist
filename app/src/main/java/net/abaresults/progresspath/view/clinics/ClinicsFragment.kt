@@ -2,19 +2,10 @@ package net.abaresults.progresspath.view.clinics
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +14,6 @@ import net.abaresults.progresspath.BaseFragment
 import net.abaresults.progresspath.R
 import net.abaresults.progresspath.databinding.FragmentClinicsBinding
 import net.abaresults.progresspath.model.Clinic
-import net.abaresults.progresspath.model.UserType
 
 @AndroidEntryPoint
 class ClinicsFragment : BaseFragment() {
@@ -69,9 +59,8 @@ class ClinicsFragment : BaseFragment() {
         }
         viewModel.state.observe(viewLifecycleOwner, stateObserver)
 
-        viewModel.userType.observe(viewLifecycleOwner) { userType ->
-            binding.fabAddClinic.isVisible = userType == UserType.COORDINATOR
-            clinicsAdapter.userType = userType
+        viewModel.userType.observe(viewLifecycleOwner) {
+            binding.fabAddClinic.isVisible = false
         }
     }
 
@@ -82,12 +71,6 @@ class ClinicsFragment : BaseFragment() {
         clinicsAdapter = ClinicsAdapter(
             onItemClicked = { clinic ->
                 viewModel.takeAction(ClinicsAction.ClinicClicked(clinic))
-            },
-            onItemEdit = { clinic ->
-                showEditDialog(clinic)
-            },
-            onItemRemove = { clinic ->
-                showRemoveDialog(clinic)
             }
         )
 
@@ -96,9 +79,7 @@ class ClinicsFragment : BaseFragment() {
             adapter = clinicsAdapter
         }
 
-        binding.fabAddClinic.setOnClickListener {
-            findNavController().navigate(R.id.addClinicFragment)
-        }
+        binding.fabAddClinic.isVisible = false
     }
 
     private fun handleContentLoaded(clinics: List<Clinic>) {
@@ -120,38 +101,4 @@ class ClinicsFragment : BaseFragment() {
     private fun hideLoading() =
         binding.loadingViewInclude.loadingView.apply { visibility = View.GONE }
 
-    private fun showEditDialog(clinic: Clinic) {
-        val editText = EditText(requireContext()).apply {
-            setText(clinic.name)
-            hint = "Clinic name"
-        }
-
-        val container = LinearLayout(requireContext()).apply {
-            setPadding(48, 0, 48, 0)
-            addView(editText)
-        }
-
-        AlertDialog.Builder(requireContext())
-            .setTitle("Edit Clinic")
-            .setView(container)
-            .setPositiveButton("Save") { _, _ ->
-                val newName = editText.text.toString().trim()
-                if (newName.isNotEmpty()) {
-                    viewModel.takeAction(ClinicsAction.UpdateClinicName(clinic.copy(name = newName)))
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun showRemoveDialog(clinic: Clinic) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Remove Clinic")
-            .setMessage("Are you sure you want to remove '${clinic.name}'?")
-            .setPositiveButton("Remove") { _, _ ->
-                viewModel.takeAction(ClinicsAction.RemoveClinic(clinic))
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
 }

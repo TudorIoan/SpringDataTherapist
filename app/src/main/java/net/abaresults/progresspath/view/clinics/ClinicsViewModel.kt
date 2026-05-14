@@ -42,16 +42,11 @@ class ClinicsViewModel @Inject constructor(
     }
 
     private fun handleStart() {
-        _userType.value = UserType.fromString(userRepo.requireUserDetails().userType)
+        _userType.value = UserType.THERAPIST
 
         update(ClinicsState.Loading)
         viewModelScope.launch {
-            val result = when (UserType.fromString(userRepo.requireUserDetails().userType)) {
-                UserType.COORDINATOR ->
-                    clinicsRepo.fetchAllClinicsCreatedByCurrentUser()
-                UserType.THERAPIST ->
-                    clinicsRepo.fetchAllClinicsWithCurrentTherapist()
-            }
+            val result = clinicsRepo.fetchAllClinicsWithCurrentTherapist()
 
             result.onSuccess {
                 clinicsList.clear()
@@ -70,32 +65,11 @@ class ClinicsViewModel @Inject constructor(
     }
 
     private fun handleRemoveClinic(clinic: Clinic) {
-        update(ClinicsState.Loading)
-        viewModelScope.launch {
-            val result = clinicsRepo.removeClinic(clinic)
-            result.onSuccess {
-                clinicsList.removeIf { it.id == clinic.id }
-                update(ClinicsState.ContentLoaded(clinicsList))
-            }.onFailure { exception ->
-                update(ClinicsState.Error(exception.message ?: "Error"))
-            }
-        }
+        update(ClinicsState.Error("Therapists cannot remove clinics."))
     }
 
     private fun handleUpdateClinicName(clinic: Clinic) {
-        update(ClinicsState.Loading)
-        viewModelScope.launch {
-            val result = clinicsRepo.updateClinic(clinic)
-            result.onSuccess {
-                val index = clinicsList.indexOfFirst { it.id == clinic.id }
-                if (index != -1) {
-                    clinicsList[index] = clinic
-                }
-                update(ClinicsState.ContentLoaded(clinicsList))
-            }.onFailure { exception ->
-                update(ClinicsState.Error(exception.message ?: "Error"))
-            }
-        }
+        update(ClinicsState.Error("Therapists cannot update clinics."))
     }
 
 }
