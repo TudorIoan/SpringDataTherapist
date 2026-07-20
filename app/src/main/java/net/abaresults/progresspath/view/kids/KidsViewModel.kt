@@ -19,7 +19,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import net.abaresults.progresspath.model.Kid
-import net.abaresults.progresspath.model.ObjItemType
 import net.abaresults.progresspath.model.UserType
 import net.abaresults.progresspath.repo.KidObjectiveRepository
 import net.abaresults.progresspath.repo.KidRepository
@@ -96,23 +95,9 @@ class KidsViewModel @Inject constructor(
         update(KidsState.Loading)
         viewModelScope.launch {
             try {
-                val kidObjectives = kidObjectiveRepo.getActiveKidObjectives(kid.id).getOrThrow()
-                val objectives = objectiveRepo.fetchObjectivesByIds(kidObjectives.map { it.objectiveId }).getOrThrow()
-
-                val insufficientObjectives = kidObjectives.filter { ko ->
-                    val isYesNoObjective = ko.itemsList.isNotEmpty() && ko.itemsList.all { it.objItem.type == ObjItemType.YES_NO }
-                    val activeCount = ko.itemsList.count { it.active && !it.mastered }
-                    val hasInactive = ko.itemsList.any { !it.active && !it.mastered }
-                    isYesNoObjective && activeCount < 4 && hasInactive
-                }.mapNotNull { ko -> objectives.find { it.id == ko.objectiveId }?.name }
-
-                if (insufficientObjectives.isNotEmpty()) {
-                    update(KidsState.InsufficientActiveItems(insufficientObjectives))
-                } else {
-                    val pdfBytes = generateKidWorksheetPdf(kid)
-                    orgRepo.setCurrentReport(pdfBytes)
-                    update(KidsState.GoToReport(pdfBytes))
-                }
+                val pdfBytes = generateKidWorksheetPdf(kid)
+                orgRepo.setCurrentReport(pdfBytes)
+                update(KidsState.GoToReport(pdfBytes))
             } catch (exception: Exception) {
                 Log.e("KidsViewModel", "Error generating kid worksheet", exception)
                 update(KidsState.Error(exception.message ?: "Error generating worksheet"))

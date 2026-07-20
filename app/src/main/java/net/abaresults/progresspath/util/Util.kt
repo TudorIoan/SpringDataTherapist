@@ -35,6 +35,7 @@ fun Date.isToday(): Boolean {
  * Determines if an item is available for a therapist to work on today.
  *
  * An item is available if it meets one of the following:
+ *   - It is not mastered
  *   - It was answered today by someone else (not the current therapist)
  *   - It has never been answered
  *   - It was not answered today
@@ -43,8 +44,8 @@ fun isItemAvailableForTherapist(
     item: net.abaresults.progresspath.model.KidObjectiveItem,
     currentTherapistUserId: String
 ): Boolean {
-    return ((item.lastResponseTime?.isToday() == true && item.lastModificationByUserId != currentTherapistUserId)
-                    || item.lastResponseTime == null || item.lastResponseTime?.isToday() == false)
+    return !item.mastered && ((item.lastResponseTime?.isToday() == true && item.lastModificationByUserId != currentTherapistUserId)
+            || item.lastResponseTime == null || item.lastResponseTime?.isToday() == false)
 }
 
 fun wrapText(text: String, maxWidth: Float, paint: Paint): List<String> {

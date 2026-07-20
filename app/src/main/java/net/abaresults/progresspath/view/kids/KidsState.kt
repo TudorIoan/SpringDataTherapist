@@ -10,5 +10,4 @@ sealed class KidsState {
         class Error(val generalError: String) : KidsState()
         object GoToObjectives : KidsState()
         class GoToReport(val pdfData: ByteArray) : KidsState()
-        class InsufficientActiveItems(val objectiveNames: List<String>) : KidsState()
 }

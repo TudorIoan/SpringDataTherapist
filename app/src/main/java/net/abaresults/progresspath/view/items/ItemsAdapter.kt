@@ -83,7 +83,9 @@ class ItemsAdapter(
             val dateFormat = SimpleDateFormat("EEE d MMM", Locale.getDefault())
             val formattedDate = dateFormat.format(item.lastResponseTime!!)
             holder.binding.lastModificationView.text = Html.fromHtml(context.getString(R.string.item_last_answer, yesNo, formattedDate), Html.FROM_HTML_MODE_LEGACY)
-            holder.binding.therapistView.text = Html.fromHtml(context.getString(R.string.item_by_therapist, item.lastModificationByUserName!!), Html.FROM_HTML_MODE_LEGACY)
+            if (item.lastModificationByUserName != null) {
+                holder.binding.therapistView.text = Html.fromHtml(context.getString(R.string.item_by_therapist, item.lastModificationByUserName), Html.FROM_HTML_MODE_LEGACY)
+            }
         }
         holder.binding.lastModificationView.isVisible = isCoordinator && lastYesNo != null
         holder.binding.therapistView.isVisible = isCoordinator && lastYesNo != null

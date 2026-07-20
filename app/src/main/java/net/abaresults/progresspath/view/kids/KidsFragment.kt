@@ -9,7 +9,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -69,7 +68,6 @@ class KidsFragment : BaseFragment() {
                 is KidsState.ContentLoaded -> handleContentLoaded(it.items, it.userType)
                 is KidsState.GoToObjectives -> navigateToObjectives()
                 is KidsState.GoToReport -> handleGoToReport(it.pdfData)
-                is KidsState.InsufficientActiveItems -> showInsufficientActiveItemsDialog(it.objectiveNames)
             }
         }
         viewModel.state.observe(viewLifecycleOwner, stateObserver)
@@ -182,14 +180,5 @@ class KidsFragment : BaseFragment() {
     private fun showLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.VISIBLE }
 
     private fun hideLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.GONE }
-
-    private fun showInsufficientActiveItemsDialog(objectiveNames: List<String>) {
-        val list = objectiveNames.joinToString("\n") { "• $it" }
-        AlertDialog.Builder(requireContext())
-            .setTitle("Insufficient Active Items")
-            .setMessage("These objectives have less than 4 active items. Please add more:\n\n$list")
-            .setPositiveButton("OK", null)
-            .show()
-    }
 
 }
