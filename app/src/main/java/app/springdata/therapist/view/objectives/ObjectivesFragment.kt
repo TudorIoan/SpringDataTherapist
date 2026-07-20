@@ -55,7 +55,6 @@ class ObjectivesFragment : BaseFragment() {
                 is ObjectivesState.Idle -> {}
                 is ObjectivesState.ContentLoaded -> handleContentLoaded(it.items)
                 is ObjectivesState.GoToItems -> navigateToItems()
-                is ObjectivesState.GoToReport -> {}
             }
         }
         viewModel.state.observe(viewLifecycleOwner, stateObserver)
@@ -66,7 +65,6 @@ class ObjectivesFragment : BaseFragment() {
         }
 
         viewModel.userType.observe(viewLifecycleOwner) { userType ->
-            objectivesAdapter.userType = userType
             binding.fabAddObjective.isVisible = false
         }
     }
@@ -77,15 +75,6 @@ class ObjectivesFragment : BaseFragment() {
         objectivesAdapter = ObjectivesAdapter(
             onItemClicked = { objectiveListItem ->
                 viewModel.takeAction(ObjectivesAction.ObjectiveClicked(objectiveListItem))
-            },
-            onToggleClicked = { kidObjective, isActive ->
-                // Therapists cannot activate or deactivate objectives.
-            },
-            onGenerateObjectiveReport = { kidObjective, objectiveName ->
-                // Therapists do not generate objective reports from this screen.
-            },
-            onItemRemove = { kidObjective ->
-                // Therapists cannot remove assigned objectives.
             }
         )
 

@@ -71,10 +71,4 @@
         android:label="Report"
         tools:layout="@layout/fragment_report" />
 
-    <fragment
-        android:id="@+id/chartFragment"
-        android:name="app.springdata.therapist.view.chart.ChartFragment"
-        android:label="Chart"
-        tools:layout="@layout/fragment_chart" />
-
 </navigation>

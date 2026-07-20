@@ -39,8 +39,7 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch {
                 userRepo.login(email, password)
                     .onSuccess {
-                        val userType = UserType.fromString(userRepo.requireUserDetails().userType)
-                        if (userType == UserType.THERAPIST) {
+                        if (userRepo.requireUserDetails().userType == UserType.THERAPIST.roleName) {
                             update(LoginState.LoginSuccess)
                         } else {
                             userRepo.logout()

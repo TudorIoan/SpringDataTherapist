@@ -174,31 +174,7 @@
             android:textSize="14sp"
             android:visibility="gone" />
 
-        <!-- Show Progress Button -->
-        <Button
-            android:id="@+id/showProgressButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Progress"
-            android:textSize="12sp"
-            android:backgroundTint="#FF9800"
-            android:textColor="@android:color/white"
-            android:visibility="gone"
-            android:layout_marginEnd="10dp"
-            />
-
-        <!-- Set Mastered Button -->
-        <Button
-            android:id="@+id/setMasteredButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Set Mastered"
-            android:textSize="12sp"
-            android:backgroundTint="#4CAF50"
-            android:textColor="@android:color/white"
-            android:visibility="gone" />
-
-        <!-- Switch for Coordinator -->
+        <!-- Switch for therapists to activate an assigned item -->
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchToggle"
             android:layout_width="wrap_content"

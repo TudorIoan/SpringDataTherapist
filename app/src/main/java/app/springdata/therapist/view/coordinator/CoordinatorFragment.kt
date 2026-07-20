@@ -7,15 +7,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import dagger.hilt.android.AndroidEntryPoint
 import app.springdata.therapist.BaseFragment
-import app.springdata.therapist.R
 import app.springdata.therapist.databinding.FragmentCoordinatorBinding
-import app.springdata.therapist.databinding.FragmentTherapistsBinding
-import app.springdata.therapist.model.Clinic
 import app.springdata.therapist.model.UserProfile
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CoordinatorFragment : BaseFragment() {
@@ -27,7 +22,6 @@ class CoordinatorFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentCoordinatorBinding.inflate(inflater, container, false)
         observeData(viewModel)
         viewModel.takeAction(CoordinatorAction.Start)
@@ -36,15 +30,13 @@ class CoordinatorFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        configureViews()
+        showBottomBar()
     }
 
     private fun observeData(viewModel: CoordinatorViewModel) {
         val stateObserver = Observer<CoordinatorState?> {
-            // null state indicates there is no action needed
             it ?: return@Observer
 
-            // Hide the loading state
             if (it != CoordinatorState.Loading) {
                 hideLoading()
             }
@@ -62,11 +54,6 @@ class CoordinatorFragment : BaseFragment() {
             binding.subtitleInclude.subtitleTextView.isVisible = true
             binding.subtitleInclude.subtitleTextView.text = title
         }
-    }
-
-    private fun configureViews() {
-        showBottomBar()
-
     }
 
     private fun handleContentLoaded(coordinatorUser: UserProfile) {

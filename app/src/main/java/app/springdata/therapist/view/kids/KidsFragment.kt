@@ -104,18 +104,14 @@ class KidsFragment : BaseFragment() {
 
     private fun handleContentLoaded(kids: List<Kid>, userType: UserType) {
         kidsAdapter.updateData(kids)
-        addMenuButtons(userType)
+        addMenuButtons()
     }
 
-    private fun addMenuButtons(userType: UserType) {
-        // Setup toolbar buttons
+    private fun addMenuButtons() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.clinics_toolbar_menu, menu)
-
-                val coordinatorItem = menu.findItem(R.id.action_coordinator)
-                coordinatorItem?.isVisible = true
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

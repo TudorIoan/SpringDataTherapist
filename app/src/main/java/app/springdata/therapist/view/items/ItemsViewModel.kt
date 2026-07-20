@@ -11,9 +11,7 @@ import app.springdata.therapist.model.FrequencyItem
 import app.springdata.therapist.model.ProgressItem
 import app.springdata.therapist.model.KidObjectiveItem
 import app.springdata.therapist.model.YesNoItem
-import app.springdata.therapist.model.UserType
 import app.springdata.therapist.repo.KidObjectiveRepository
-import app.springdata.therapist.repo.ObjectiveRepository
 import app.springdata.therapist.repo.OrgRepository
 import app.springdata.therapist.repo.UserRepository
 import app.springdata.therapist.util.isItemAvailableForTherapist
@@ -25,7 +23,6 @@ import javax.inject.Inject
 class ItemsViewModel @Inject constructor(
     private val orgRepo: OrgRepository,
     private val userRepo: UserRepository,
-    private val objectiveRepo: ObjectiveRepository,
     private val kidObjectiveRepo: KidObjectiveRepository
 ) : ViewModel() {
     private val _state = MutableLiveData<ItemState>()
@@ -34,9 +31,6 @@ class ItemsViewModel @Inject constructor(
 
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
-
-    private val _userType = MutableLiveData<UserType>()
-    val userType: LiveData<UserType> = _userType
 
     var items: List<KidObjectiveItem> = listOf()
 
@@ -51,10 +45,8 @@ class ItemsViewModel @Inject constructor(
 
             is ItemAction.ItemYesClicked -> handleYesClicked(action.item)
             is ItemAction.ItemNoClicked -> handleNoClicked(action.item)
-            is ItemAction.RemoveItem -> handleRemoveItem(action.item)
             is ItemAction.FrequencySet -> handleFrequencySet(action.item, action.frequency)
             is ItemAction.ProgressSet -> handleProgressSet(action.item, action.progress)
-            is ItemAction.SetMastered -> handleSetMastered(action.item)
             is ItemAction.CheckmarkClicked -> handleCheckmarkClicked(action.item)
         }
 
@@ -67,22 +59,14 @@ class ItemsViewModel @Inject constructor(
     private fun handleStart() {
         _title.value =
             "${orgRepo.requireSelectedClinic().name} > ${orgRepo.requireSelectedKid().name} > ${orgRepo.requireSelectedObjective().name}"
-        _userType.value = UserType.fromString(userRepo.requireUserDetails().userType)
 
         updateItems()
     }
 
     private fun updateItems() {
-
-        // Filter items for therapists (if an item has been answered today by current therapist - do not show it)
-        val filteredItems = if (userType.value == UserType.COORDINATOR) {
-            orgRepo.requireSelectedKidObjective().itemsList
-        } else {
-            // For therapists, filter to only show items available for them to work on today
-            val currentUserId = userRepo.requireUserDetails().ownerUid
-            orgRepo.requireSelectedKidObjective().itemsList.filter { item ->
-                isItemAvailableForTherapist(item, currentUserId)
-            }
+        val currentUserId = userRepo.requireUserDetails().ownerUid
+        val filteredItems = orgRepo.requireSelectedKidObjective().itemsList.filter { item ->
+            isItemAvailableForTherapist(item, currentUserId)
         }
 
 
@@ -181,19 +165,6 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    private fun handleSetMastered(item: KidObjectiveItem) {
-        update(ItemState.Loading)
-        item.mastered = !item.mastered
-        viewModelScope.launch {
-            val result = kidObjectiveRepo.updateKidObjective(orgRepo.requireSelectedKidObjective())
-            result.onSuccess {
-                updateItems()
-            }.onFailure { exception ->
-                update(ItemState.Error(exception.message ?: "Error"))
-            }
-        }
-    }
-
     private fun handleCheckmarkClicked(item: KidObjectiveItem) {
         update(ItemState.Loading)
         item.checkmarkList.add(Date())
@@ -210,29 +181,4 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    private fun handleRemoveItem(itemToRemove: KidObjectiveItem) {
-        update(ItemState.Loading)
-        val newItemsList = orgRepo.requireSelectedObjective().itemsList.filter {
-            it.normalizedName != itemToRemove.objItem.normalizedName
-        }
-        val newKidObjectiveItemList = orgRepo.requireSelectedKidObjective().itemsList.filter {
-            it.objItem.normalizedName != itemToRemove.objItem.normalizedName
-        }
-        val newObjective =
-            orgRepo.requireSelectedObjective().copy(itemsList = newItemsList.toMutableList())
-        val newKidObjective = orgRepo.requireSelectedKidObjective()
-            .copy(itemsList = newKidObjectiveItemList.toMutableList())
-
-        viewModelScope.launch {
-            viewModelScope.launch {
-                val result = objectiveRepo.updateObjective(newObjective)
-                result.onSuccess {
-                    orgRepo.setSelectedObjective(newObjective, newKidObjective)
-                    updateItems()
-                }.onFailure { exception ->
-                    update(ItemState.Error(exception.message ?: "Error"))
-                }
-            }
-        }
-    }
 }

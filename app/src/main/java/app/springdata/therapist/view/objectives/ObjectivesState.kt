@@ -6,5 +6,4 @@ sealed class ObjectivesState {
         class ContentLoaded(val items: List<ObjectivesListItem>) : ObjectivesState()
         class Error(val generalError: String) : ObjectivesState()
         object GoToItems : ObjectivesState()
-        data class GoToReport(val pdfByteArray: ByteArray) : ObjectivesState()
 }

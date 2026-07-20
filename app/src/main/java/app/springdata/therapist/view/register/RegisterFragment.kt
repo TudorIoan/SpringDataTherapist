@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import app.springdata.therapist.BaseFragment
-import app.springdata.therapist.BuildConfig
 import app.springdata.therapist.R
 import app.springdata.therapist.databinding.FragmentRegisterBinding
 import app.springdata.therapist.model.UserType
@@ -71,7 +70,7 @@ class RegisterFragment : BaseFragment() {
     private fun configureViews() {
         hideTopBar()
         hideBottomBar()
-        setupUserTypeSwitch()
+        binding.userTypeSwitchContainer.isVisible = false
 
         binding.loginButton.setOnClickListener {
             navigateToLogin()
@@ -91,27 +90,9 @@ class RegisterFragment : BaseFragment() {
                     binding.emailEditText.text.toString().trim(),
                     binding.passwordEditText.text.toString().trim(),
                     binding.confirmPasswordEditText.text.toString().trim(),
-                    appUserType()
+                    UserType.THERAPIST
                 )
             )
-        }
-    }
-
-    private fun setupUserTypeSwitch() {
-        val userType = appUserType()
-        binding.userTypeSwitch.isChecked = userType == UserType.COORDINATOR
-        binding.userTypeSwitch.text = when (userType) {
-            UserType.COORDINATOR -> getString(R.string.register_user_type_coordinator_label)
-            UserType.THERAPIST -> getString(R.string.register_user_type_therapist_label)
-        }
-        binding.userTypeSwitchContainer.isVisible = false
-    }
-
-    private fun appUserType(): UserType {
-        return when (BuildConfig.SPRINGDATA_APP_ROLE) {
-            "coordinator" -> UserType.COORDINATOR
-            "therapist" -> UserType.THERAPIST
-            else -> UserType.THERAPIST
         }
     }
 
@@ -159,12 +140,6 @@ class RegisterFragment : BaseFragment() {
     }
 
     private fun handleInvitedTherapistFound(coordinatorName: String?) {
-        if (appUserType() != UserType.THERAPIST) {
-            binding.userTypeSwitchContainer.isVisible = false
-            binding.invitedTextView.isVisible = false
-            return
-        }
-
         coordinatorName?.let {
             binding.userTypeSwitch.isChecked = false
             binding.userTypeSwitchContainer.isVisible = false

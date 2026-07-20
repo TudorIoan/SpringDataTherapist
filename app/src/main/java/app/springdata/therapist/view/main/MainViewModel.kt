@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import app.springdata.therapist.model.UserType
 import app.springdata.therapist.repo.UserRepository
 import javax.inject.Inject
 
@@ -32,10 +31,6 @@ class MainViewModel@Inject constructor(
     }
 
     private fun updateAuthStatus() {
-        val isLoggedIn = userRepo.isLoggedIn()
-        val userType = if (isLoggedIn) {
-            UserType.fromString(userRepo.requireUserDetails().userType)
-        } else null
-        update(MainState.AuthStatus(isLoggedIn, userType))
+        update(MainState.AuthStatus(userRepo.isLoggedIn()))
     }
 }
