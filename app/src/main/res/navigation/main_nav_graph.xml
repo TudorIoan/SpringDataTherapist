@@ -7,73 +7,73 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="net.abaresults.progresspath.view.login.LoginFragment"
+        android:name="app.springdata.therapist.view.login.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login" />
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="net.abaresults.progresspath.view.register.RegisterFragment"
+        android:name="app.springdata.therapist.view.register.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/fragment_register" />
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="net.abaresults.progresspath.view.home.HomeFragment"
+        android:name="app.springdata.therapist.view.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/moreFragment"
-        android:name="net.abaresults.progresspath.view.more.MoreFragment"
+        android:name="app.springdata.therapist.view.more.MoreFragment"
         android:label="More"
         tools:layout="@layout/fragment_more" />
 
     <fragment
         android:id="@+id/myAccountFragment"
-        android:name="net.abaresults.progresspath.view.my_account.MyAccountFragment"
+        android:name="app.springdata.therapist.view.my_account.MyAccountFragment"
         android:label="My Account"
         tools:layout="@layout/fragment_my_account" />
 
     <fragment
         android:id="@+id/clinicsFragment"
-        android:name="net.abaresults.progresspath.view.clinics.ClinicsFragment"
+        android:name="app.springdata.therapist.view.clinics.ClinicsFragment"
         android:label="Clinics"
         tools:layout="@layout/fragment_clinics" />
 
     <fragment
         android:id="@+id/kidsFragment"
-        android:name="net.abaresults.progresspath.view.kids.KidsFragment"
+        android:name="app.springdata.therapist.view.kids.KidsFragment"
         android:label="Kids"
         tools:layout="@layout/fragment_kids" />
 
     <fragment
         android:id="@+id/objectivesFragment"
-        android:name="net.abaresults.progresspath.view.objectives.ObjectivesFragment"
+        android:name="app.springdata.therapist.view.objectives.ObjectivesFragment"
         android:label="Objectives"
         tools:layout="@layout/fragment_objectives" />
 
     <fragment
         android:id="@+id/itemsFragment"
-        android:name="net.abaresults.progresspath.view.items.ItemsFragment"
+        android:name="app.springdata.therapist.view.items.ItemsFragment"
         android:label="Items"
         tools:layout="@layout/fragment_items" />
 
     <fragment
         android:id="@+id/coordinatorFragment"
-        android:name="net.abaresults.progresspath.view.coordinator.CoordinatorFragment"
+        android:name="app.springdata.therapist.view.coordinator.CoordinatorFragment"
         android:label="Coordinator"
         tools:layout="@layout/fragment_coordinator" />
 
     <fragment
         android:id="@+id/reportFragment"
-        android:name="net.abaresults.progresspath.view.report.ReportFragment"
+        android:name="app.springdata.therapist.view.report.ReportFragment"
         android:label="Report"
         tools:layout="@layout/fragment_report" />
 
     <fragment
         android:id="@+id/chartFragment"
-        android:name="net.abaresults.progresspath.view.chart.ChartFragment"
+        android:name="app.springdata.therapist.view.chart.ChartFragment"
         android:label="Chart"
         tools:layout="@layout/fragment_chart" />
 

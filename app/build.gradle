@@ -9,14 +9,14 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlinx-serialization'
 android {
     compileSdk rootProject.targetSdkVersion
-    namespace = "net.abaresults.progresspath"
+    namespace = "app.springdata.therapist"
     defaultConfig {
-        applicationId "net.abaresults.progresspath"
+        applicationId "app.springdata.therapist"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 20
         versionName "1.19"
-        testInstrumentationRunner "androidx. n test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "UNSPLASH_ACCESS_KEY", "\"" + project.findProperty("unsplash_access_key") + "\"")
         buildConfigField("String", "SPRINGDATA_APP_ROLE", "\"therapist\"")
     }

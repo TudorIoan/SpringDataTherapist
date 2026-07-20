@@ -1,0 +1,75 @@
+package app.springdata.therapist.view.clinics
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import app.springdata.therapist.model.Clinic
+import app.springdata.therapist.model.UserType
+import app.springdata.therapist.repo.ClinicRepository
+import app.springdata.therapist.repo.OrgRepository
+import app.springdata.therapist.repo.UserRepository
+import javax.inject.Inject
+
+@HiltViewModel
+class ClinicsViewModel @Inject constructor(
+    private val clinicsRepo: ClinicRepository,
+    private val orgRepo: OrgRepository,
+    private val userRepo: UserRepository
+)  : ViewModel() {
+    private val _state = MutableLiveData<ClinicsState>()
+        .apply { value = ClinicsState.Idle }
+    val state: LiveData<ClinicsState> = _state
+
+    private val _userType = MutableLiveData<UserType>()
+    val userType: LiveData<UserType> = _userType
+
+    val clinicsList = mutableListOf<Clinic>()
+
+    fun takeAction(action: ClinicsAction) {
+        when (action) {
+            is ClinicsAction.Start -> handleStart()
+            is ClinicsAction.ClinicClicked -> handleClinicClicked(action.clinic)
+            is ClinicsAction.RemoveClinic -> handleRemoveClinic(action.clinic)
+            is ClinicsAction.UpdateClinicName -> handleUpdateClinicName(action.clinic)
+        }
+    }
+
+    private fun update(newState: ClinicsState) {
+        _state.value = newState
+    }
+
+    private fun handleStart() {
+        _userType.value = UserType.THERAPIST
+
+        update(ClinicsState.Loading)
+        viewModelScope.launch {
+            val result = clinicsRepo.fetchAllClinicsWithCurrentTherapist()
+
+            result.onSuccess {
+                clinicsList.clear()
+                clinicsList.addAll(it)
+                update(ClinicsState.ContentLoaded(clinicsList))
+            }.onFailure { exception ->
+                update(ClinicsState.Error(exception.message ?: "Error"))
+            }
+        }
+    }
+
+    private fun handleClinicClicked(clinic: Clinic) {
+        orgRepo.setSelectedClinic(clinic)
+        update(ClinicsState.GoToKids)
+        update(ClinicsState.Idle)
+    }
+
+    private fun handleRemoveClinic(clinic: Clinic) {
+        update(ClinicsState.Error("Therapists cannot remove clinics."))
+    }
+
+    private fun handleUpdateClinicName(clinic: Clinic) {
+        update(ClinicsState.Error("Therapists cannot update clinics."))
+    }
+
+}

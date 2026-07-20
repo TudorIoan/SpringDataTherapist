@@ -1,0 +1,11 @@
+package app.springdata.therapist.view.register
+
+import app.springdata.therapist.model.UserProfile
+
+sealed class RegisterState {
+        object Idle: RegisterState()
+        object Loading : RegisterState()
+        object RegisterSuccess : RegisterState()
+        class InvitedTherapistFound(val coordinatorName: String?) : RegisterState()
+        class Error(val generalError: String, val nameError: String, val emailError: String, val passwordError: String, val confirmPasswordError: String) : RegisterState()
+}
