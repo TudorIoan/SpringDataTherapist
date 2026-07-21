@@ -3,6 +3,7 @@ package app.springdata.therapist.view.items
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import app.springdata.therapist.databinding.ItemItemBinding
 import app.springdata.therapist.model.KidObjectiveItem
@@ -12,7 +13,7 @@ class ItemsAdapter(
     private val onToggleClicked: (KidObjectiveItem) -> Unit,
     private val onYesClicked: (KidObjectiveItem) -> Unit,
     private val onNoClicked: (KidObjectiveItem) -> Unit,
-    private val onFrequencySet: (KidObjectiveItem, Int) -> Unit,
+    private val onFrequencySet: (KidObjectiveItem, Int, Int) -> Unit,
     private val onProgressSet: (KidObjectiveItem, Int) -> Unit,
     private val onCheckmarkClicked: (KidObjectiveItem) -> Unit
 ) : RecyclerView.Adapter<ItemsAdapter.ViewHolder>() {
@@ -71,9 +72,16 @@ class ItemsAdapter(
         }
 
         holder.binding.setButton.setOnClickListener {
-            val frequencyText = holder.binding.frequencyEditText.text.toString()
+            val frequencyText = holder.binding.frequencyEditText.text.toString().trim()
+            val intervalText = holder.binding.frequencyIntervalEditText.text.toString().trim()
+            if (frequencyText.isEmpty() || intervalText.isEmpty()) {
+                Toast.makeText(holder.itemView.context, "Frequency and interval are required", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val frequency = frequencyText.toIntOrNull() ?: 0
-            onFrequencySet(item, frequency)
+            val interval = intervalText.toIntOrNull() ?: 0
+            onFrequencySet(item, frequency, interval)
         }
 
         holder.binding.setPercentageButton.setOnClickListener {

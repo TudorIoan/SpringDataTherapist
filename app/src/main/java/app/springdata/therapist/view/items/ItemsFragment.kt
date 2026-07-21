@@ -92,8 +92,8 @@ class ItemsFragment : BaseFragment() {
             onToggleClicked = { item ->
                 viewModel.takeAction(ItemAction.ItemToggleClicked(item))
             },
-            onFrequencySet = { item, freq ->
-                viewModel.takeAction(ItemAction.FrequencySet(item, freq))
+            onFrequencySet = { item, freq, interval ->
+                viewModel.takeAction(ItemAction.FrequencySet(item, freq, interval))
             },
             onProgressSet = { item, progress ->
                 viewModel.takeAction(ItemAction.ProgressSet(item, progress))
