@@ -14,7 +14,6 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val clinicRepo: ClinicRepository,
     private val kidRepo: KidRepository
 ) {
 
