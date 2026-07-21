@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SpringData Therapist</string>
+    <string name="app_name">Therapist</string>
     <string name="number">Number:</string>
     <string name="add">Add</string>
     <string name="yes">Yes</string>
