@@ -58,7 +58,7 @@ class ItemsViewModel @Inject constructor(
 
     private fun handleStart() {
         _title.value =
-            "${orgRepo.requireSelectedClinic().name} > ${orgRepo.requireSelectedKid().name} > ${orgRepo.requireSelectedObjective().name}"
+            "${orgRepo.requireSelectedKid().name} → ${orgRepo.requireSelectedObjective().name}"
 
         updateItems()
     }

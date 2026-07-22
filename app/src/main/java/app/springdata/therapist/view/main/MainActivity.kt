@@ -7,6 +7,8 @@ import android.net.NetworkCapabilities
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -71,6 +73,10 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfig = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfig)
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            binding.toolbar.post { tintToolbarNavigationIcon() }
+        }
+        tintToolbarNavigationIcon()
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
@@ -88,6 +94,13 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun tintToolbarNavigationIcon() {
+        val navigationIcon = binding.toolbar.navigationIcon ?: return
+        val wrappedIcon = DrawableCompat.wrap(navigationIcon.mutate())
+        DrawableCompat.setTint(wrappedIcon, ContextCompat.getColor(this, android.R.color.white))
+        binding.toolbar.navigationIcon = wrappedIcon
     }
 
     override fun onSupportNavigateUp(): Boolean {

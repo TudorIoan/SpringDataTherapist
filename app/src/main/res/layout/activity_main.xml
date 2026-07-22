@@ -12,13 +12,21 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/toolbarTeal"
             android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextAppearance="@style/ToolbarTitleStyle" />
+                android:background="@color/toolbarTeal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:theme="@style/ToolbarTheme"
+                app:navigationIconTint="@android:color/white"
+                app:titleCentered="true"
+                app:titleTextAppearance="@style/ToolbarTitleStyle"
+                app:titleTextColor="@android:color/white" />
 
             <TextView
                 android:id="@+id/offlineInfoTextView"
@@ -38,8 +46,8 @@
             <View
                 android:id="@+id/separator"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#333333"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -80,7 +80,7 @@ class ItemsFragment : BaseFragment() {
     }
 
     private fun configureViews() {
-        showBottomBar()
+        hideBottomBar()
 
         itemsAdapter = ItemsAdapter(
             onYesClicked = { item ->

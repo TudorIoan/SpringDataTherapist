@@ -6,6 +6,7 @@
         android:id="@+id/action_coordinator"
         android:icon="@drawable/ic_coordinator"
         android:title="Coordinator"
+        app:iconTint="@android:color/white"
         app:showAsAction="always" />
 
 </menu>

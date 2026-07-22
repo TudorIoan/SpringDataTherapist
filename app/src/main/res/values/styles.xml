@@ -6,13 +6,19 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/toolbarTealDark</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
     </style>
 <!-- res/values/styles.xml or themes.xml -->
     <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textStyle">bold</item>
-        <!-- You can also change other attributes like textSize or textColor here -->
-        <!-- <item name="android:textSize">20sp</item> -->
-        <!-- <item name="android:textColor">@color/your_title_color</item> -->
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
 </resources>

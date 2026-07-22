@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import app.springdata.therapist.BaseFragment
+import app.springdata.therapist.R
 import app.springdata.therapist.databinding.FragmentCoordinatorBinding
 import app.springdata.therapist.model.UserProfile
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +31,7 @@ class CoordinatorFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showBottomBar()
+        hideBottomBar()
     }
 
     private fun observeData(viewModel: CoordinatorViewModel) {
@@ -52,7 +53,7 @@ class CoordinatorFragment : BaseFragment() {
 
         viewModel.title.observe(viewLifecycleOwner) { title ->
             binding.subtitleInclude.subtitleTextView.isVisible = true
-            binding.subtitleInclude.subtitleTextView.text = title
+            binding.subtitleInclude.subtitleTextView.text = getString(R.string.clinic_title, title)
         }
     }
 

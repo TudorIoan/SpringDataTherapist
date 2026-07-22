@@ -8,6 +8,8 @@
     <string name="loading_please_wait">Loading, please wait…</string>
     <string name="msg_invalid_number_selected">You must enter a valid integer</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="clinic_title">Clinic: %s</string>
+    <string name="objectives">Objectives</string>
 
     <string name="register_user_type_therapist_label">I\'m a Therapist</string>
     <string name="register_invited_therapist">You are a Therapist, invited by &lt;b&gt;%s&lt;/b&gt;</string>

@@ -60,8 +60,15 @@ class ObjectivesFragment : BaseFragment() {
         viewModel.state.observe(viewLifecycleOwner, stateObserver)
 
         viewModel.title.observe(viewLifecycleOwner) { title ->
+            val titleParts = title.split(" > ", limit = 2)
+            val clinicName = titleParts.firstOrNull().orEmpty()
+            val kidName = titleParts.getOrNull(1).orEmpty()
+
+            setTitle(kidName.ifEmpty { getString(R.string.objectives) })
             binding.subtitleInclude.subtitleTextView.isVisible = true
-            binding.subtitleInclude.subtitleTextView.text = title
+            binding.subtitleInclude.subtitleTextView.text = getString(R.string.clinic_title, clinicName)
+            binding.subtitleInclude.sectionTitleTextView.isVisible = true
+            binding.subtitleInclude.sectionTitleTextView.text = getString(R.string.objectives)
         }
 
         viewModel.userType.observe(viewLifecycleOwner) { userType ->
@@ -70,7 +77,7 @@ class ObjectivesFragment : BaseFragment() {
     }
 
     private fun configureViews() {
-        showBottomBar()
+        hideBottomBar()
 
         objectivesAdapter = ObjectivesAdapter(
             onItemClicked = { objectiveListItem ->

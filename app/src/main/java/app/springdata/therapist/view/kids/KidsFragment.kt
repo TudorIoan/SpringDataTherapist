@@ -74,7 +74,7 @@ class KidsFragment : BaseFragment() {
 
         viewModel.title.observe(viewLifecycleOwner) { title ->
             binding.subtitleInclude.subtitleTextView.isVisible = true
-            binding.subtitleInclude.subtitleTextView.text = title
+            binding.subtitleInclude.subtitleTextView.text = getString(R.string.clinic_title, title)
         }
 
         viewModel.userType.observe(viewLifecycleOwner) { userType ->
@@ -83,7 +83,7 @@ class KidsFragment : BaseFragment() {
     }
 
     private fun configureViews() {
-        showBottomBar()
+        hideBottomBar()
 
         kidsAdapter = KidsAdapter(
             onItemClicked = { kid ->
