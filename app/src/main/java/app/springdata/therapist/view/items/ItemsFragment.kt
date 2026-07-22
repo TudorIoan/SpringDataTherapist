@@ -21,7 +21,6 @@ class ItemsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentItemsBinding
     private val viewModel: ItemsViewModel by viewModels()
-
     private lateinit var itemsAdapter: ItemsAdapter
 
     override fun onCreateView(
