@@ -10,5 +10,5 @@ data class Clinic(
     val ownerUid: String = "",// Coordinator UserProfile uid
     @ServerTimestamp
     val createdAt: Date? = null,
+    val kidsCount: Int = 0,
 )
-

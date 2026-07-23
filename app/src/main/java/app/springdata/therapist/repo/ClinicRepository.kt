@@ -30,6 +30,12 @@ class ClinicRepository @Inject constructor(
                 return Result.success(emptyList())
             }
 
+            val kidsByClinicId = kidsQuerySnapshot.documents
+                .mapNotNull { it.toObject(Kid::class.java)?.clinicId }
+                .filter { it.isNotBlank() }
+                .groupingBy { it }
+                .eachCount()
+
             val clinicIds = kidsQuerySnapshot.documents
                 .mapNotNull { it.toObject(Kid::class.java)?.clinicId }
                 .filter { it.isNotBlank() }
@@ -50,6 +56,7 @@ class ClinicRepository @Inject constructor(
 
                 clinicsQuerySnapshot.documents.mapNotNullTo(clinics) { document ->
                     document.toObject(Clinic::class.java)
+                        ?.copy(kidsCount = kidsByClinicId[document.id] ?: 0)
                 }
             }
 
