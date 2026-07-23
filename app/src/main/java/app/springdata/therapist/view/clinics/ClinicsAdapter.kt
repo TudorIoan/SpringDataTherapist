@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.springdata.therapist.R
 import app.springdata.therapist.model.Clinic
@@ -39,7 +40,8 @@ class ClinicsAdapter(
         val clinic = items[position]
         holder.nameView.text = clinic.name
         holder.initialsView.text = clinicInitials(clinic.name)
-        holder.initialsView.background = clinicInitialsBackground(clinic.name)
+        holder.initialsView.background = clinicInitialsBackground(holder.itemView)
+        holder.initialsView.setTextColor(generatedInitialsColor(clinic.name))
         holder.metaView.text = "${clinic.kidsCount} ${if (clinic.kidsCount == 1) "KID" else "KIDS"}"
         holder.itemView.setOnClickListener {
             onItemClicked(clinic)
@@ -61,15 +63,19 @@ class ClinicsAdapter(
         }.uppercase()
     }
 
-    private fun clinicInitialsBackground(name: String): GradientDrawable {
-        val hue = (name.hashCode() and Int.MAX_VALUE) % 360
-        val color = Color.HSVToColor(floatArrayOf(hue.toFloat(), 0.74f, 0.94f))
+    private fun clinicInitialsBackground(view: View): GradientDrawable {
         val radius = 10f * android.content.res.Resources.getSystem().displayMetrics.density
 
         return GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadius = radius
-            setColor(color)
+            setColor(ContextCompat.getColor(view.context, R.color.itemInitialsBackground))
         }
     }
+
+    private fun generatedInitialsColor(name: String): Int {
+        val hue = (name.hashCode() and Int.MAX_VALUE) % 360
+        return Color.HSVToColor(floatArrayOf(hue.toFloat(), 0.76f, 0.76f))
+    }
+
 }

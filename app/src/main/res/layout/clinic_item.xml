@@ -33,13 +33,13 @@
             android:layout_height="42dp"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:textColor="@android:color/white"
+            android:textColor="@color/toolbarTeal"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:background="#3B82F6"
+            tools:background="@color/itemInitialsBackground"
             tools:text="BH" />
 
         <TextView

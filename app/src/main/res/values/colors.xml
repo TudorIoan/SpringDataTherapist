@@ -15,6 +15,7 @@
     <color name="clinicScreenBackground">#F8F5FA</color>
     <color name="clinicCardBackground">#FFFFFF</color>
     <color name="clinicCardStroke">#ECE7EF</color>
+    <color name="itemInitialsBackground">#EEF1F3</color>
     <color name="clinicTitleText">#3A3444</color>
     <color name="clinicMetaText">#7B8791</color>
     <color name="clinicChevronText">#9AA7B0</color>
