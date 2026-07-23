@@ -41,22 +41,29 @@
         android:shadowDy="2"
         android:shadowRadius="0.8"
         android:textColor="@android:color/white"
-        android:textSize="22sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitleTextView" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/contentBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="subtitleTextView,sectionTitleTextView,errorTextView" />
+
     <View
-        android:id="@+id/separator"
+        android:id="@+id/bottomDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/toolbarTeal"
+        android:background="@color/toolbarTealOutlineDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sectionTitleTextView"
-        app:layout_constraintBottom_toTopOf="@id/errorTextView"
-        />
+        app:layout_constraintTop_toBottomOf="@id/contentBottomBarrier"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/errorTextView"
@@ -72,7 +79,6 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separator"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sectionTitleTextView"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
