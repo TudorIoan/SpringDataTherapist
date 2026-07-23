@@ -51,6 +51,18 @@ class ItemsAdapter(
         holder.binding.checkmarkYesButton.visibility = if (item.active && !item.mastered && isCheckmarkItem) View.VISIBLE else View.GONE
         holder.binding.switchToggle.visibility = if (!item.active && !item.mastered) View.VISIBLE else View.GONE
         holder.binding.masteredImageView.visibility = if (item.mastered) View.VISIBLE else View.GONE
+        holder.binding.actionTray.visibility =
+            if (holder.binding.yesNoButtonsLayout.visibility == View.VISIBLE ||
+                holder.binding.frequencyInputLayout.visibility == View.VISIBLE ||
+                holder.binding.percentageInputLayout.visibility == View.VISIBLE ||
+                holder.binding.checkmarkYesButton.visibility == View.VISIBLE ||
+                holder.binding.switchToggle.visibility == View.VISIBLE ||
+                holder.binding.masteredImageView.visibility == View.VISIBLE
+            ) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
 
         holder.binding.switchToggle.setOnCheckedChangeListener(null) // Prevent triggering listener
         holder.binding.switchToggle.isChecked = item.active

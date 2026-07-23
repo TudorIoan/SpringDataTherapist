@@ -24,4 +24,11 @@
     <color name="objectiveGroupItemBackground">#FFFFFF</color>
     <color name="objectiveGroupDivider">#E9EFEC</color>
     <color name="objectiveLevelYellow">#F1A208</color>
+    <color name="itemActionTrayBackground">#F3F6F7</color>
+    <color name="itemInputBackground">#FFFFFF</color>
+    <color name="itemInputStroke">#D9E0E3</color>
+    <color name="itemYesGreen">#4CAF50</color>
+    <color name="itemNoRed">#F44336</color>
+    <color name="itemSetBlue">#35B8A8</color>
+    <color name="itemSetPurple">#A62AB7</color>
 </resources>
