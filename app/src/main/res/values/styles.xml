@@ -8,6 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/toolbarTealDark</item>
         <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:windowBackground">@color/toolbarTeal</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 <!-- res/values/styles.xml or themes.xml -->
     <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">

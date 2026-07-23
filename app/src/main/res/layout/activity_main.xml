@@ -6,6 +6,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/toolbarTeal"
         android:fitsSystemWindows="true">
 
         <!-- Toolbar -->
@@ -13,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/toolbarTeal"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            app:statusBarForeground="@color/toolbarTeal">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
