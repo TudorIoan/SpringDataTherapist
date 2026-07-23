@@ -10,6 +10,6 @@
     <color name="toolbarTealDark">#2A9F91</color>
     <color name="toolbarTealInset">#319D91</color>
     <color name="toolbarTealOutlineDark">#30988C</color>
-    <color name="toolbarTextMuted">#AFC8C5</color>
+    <color name="toolbarTextMuted">#185B55</color>
     <color name="screenBackground">#F7F8FA</color>
 </resources>
