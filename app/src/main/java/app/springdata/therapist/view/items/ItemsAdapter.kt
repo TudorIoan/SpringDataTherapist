@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import app.springdata.therapist.R
 import app.springdata.therapist.databinding.ItemItemBinding
 import app.springdata.therapist.model.KidObjectiveItem
 import app.springdata.therapist.model.ObjItemType
@@ -49,14 +51,15 @@ class ItemsAdapter(
         holder.binding.frequencyInputLayout.visibility = if (item.active && !item.mastered && isFrequencyItem) View.VISIBLE else View.GONE
         holder.binding.percentageInputLayout.visibility = if (item.active && !item.mastered && isPercentageItem) View.VISIBLE else View.GONE
         holder.binding.checkmarkYesButton.visibility = if (item.active && !item.mastered && isCheckmarkItem) View.VISIBLE else View.GONE
-        holder.binding.switchToggle.visibility = if (!item.active && !item.mastered) View.VISIBLE else View.GONE
+        holder.binding.activationSwitchLayout.visibility = if (!item.active && !item.mastered) View.VISIBLE else View.GONE
+        setActivationLabel(holder, item.active)
         holder.binding.masteredImageView.visibility = if (item.mastered) View.VISIBLE else View.GONE
         holder.binding.actionTray.visibility =
             if (holder.binding.yesNoButtonsLayout.visibility == View.VISIBLE ||
                 holder.binding.frequencyInputLayout.visibility == View.VISIBLE ||
                 holder.binding.percentageInputLayout.visibility == View.VISIBLE ||
                 holder.binding.checkmarkYesButton.visibility == View.VISIBLE ||
-                holder.binding.switchToggle.visibility == View.VISIBLE ||
+                holder.binding.activationSwitchLayout.visibility == View.VISIBLE ||
                 holder.binding.masteredImageView.visibility == View.VISIBLE
             ) {
                 View.VISIBLE
@@ -80,6 +83,7 @@ class ItemsAdapter(
 
         holder.binding.switchToggle.setOnCheckedChangeListener { _, isChecked ->
             item.active = isChecked
+            setActivationLabel(holder, isChecked)
             onToggleClicked(item)
         }
 
@@ -109,4 +113,15 @@ class ItemsAdapter(
     }
 
     override fun getItemCount() = items.size
+
+    private fun setActivationLabel(holder: ViewHolder, isActive: Boolean) {
+        val context = holder.itemView.context
+        holder.binding.activationStatusLabel.text = if (isActive) "Active" else "Inactive"
+        holder.binding.activationStatusLabel.setTextColor(
+            ContextCompat.getColor(
+                context,
+                if (isActive) R.color.toolbarTeal else R.color.clinicTitleText
+            )
+        )
+    }
 }
