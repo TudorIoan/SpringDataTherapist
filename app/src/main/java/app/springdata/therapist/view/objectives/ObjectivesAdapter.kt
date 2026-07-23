@@ -4,8 +4,10 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import app.springdata.therapist.R
 import app.springdata.therapist.databinding.ObjectiveItemBinding
 import app.springdata.therapist.databinding.ObjectiveTypeItemBinding
 import app.springdata.therapist.model.KidObjective
@@ -39,6 +41,20 @@ class ObjectivesAdapter(
 
         override fun bind(item: ObjectivesListItem.ObjectiveTypeItem) {
             binding.textView.text = item.objectiveType.displayName
+            binding.root.setBackgroundResource(
+                if (item.expanded) {
+                    R.drawable.bg_objective_type_expanded
+                } else {
+                    R.drawable.bg_objective_type_collapsed
+                }
+            )
+            binding.chevronView.setImageResource(
+                if (item.expanded) {
+                    R.drawable.ic_chevron_up
+                } else {
+                    R.drawable.ic_chevron_down
+                }
+            )
 
             // Set level label text and background color
             binding.levelLabel.text = item.objectiveType.level.displayName.uppercase()
@@ -47,7 +63,7 @@ class ObjectivesAdapter(
             // Create rounded background with appropriate color
             val backgroundDrawable = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
-                cornerRadius = 8f
+                cornerRadius = 5f * binding.root.resources.displayMetrics.density
                 setColor(getLevelBackgroundColor(item.objectiveType.level))
             }
             binding.levelLabel.background = backgroundDrawable
@@ -59,9 +75,9 @@ class ObjectivesAdapter(
 
         private fun getLevelBackgroundColor(level: ObjLevel): Int {
             return when (level) {
-                ObjLevel.BEGINNER -> 0xFF4CAF50.toInt() // Green
-                ObjLevel.INTERMEDIATE -> 0xFFe3dc12.toInt() // Darker shade of yellow
-                ObjLevel.ADVANCED -> 0xFF2196F3.toInt() // Blue
+                ObjLevel.BEGINNER -> 0xFF4CAF50.toInt()
+                ObjLevel.INTERMEDIATE -> ContextCompat.getColor(binding.root.context, R.color.objectiveLevelYellow)
+                ObjLevel.ADVANCED -> 0xFF2196F3.toInt()
             }
         }
     }
@@ -71,8 +87,18 @@ class ObjectivesAdapter(
         private val onItemClicked: (ObjectivesListItem.ObjectiveItem) -> Unit
     ) : BaseViewHolder<ObjectivesListItem.ObjectiveItem>(binding.root) {
 
-        override fun bind(item: ObjectivesListItem.ObjectiveItem) {
+        override fun bind(item: ObjectivesListItem.ObjectiveItem) = bind(item, isLastInGroup = true)
+
+        fun bind(item: ObjectivesListItem.ObjectiveItem, isLastInGroup: Boolean) {
             binding.nameView.text = item.objectiveName
+            binding.root.setBackgroundResource(
+                if (isLastInGroup) {
+                    R.drawable.bg_objective_item_last
+                } else {
+                    R.drawable.bg_objective_item_middle
+                }
+            )
+            binding.separator.isVisible = !isLastInGroup
 
             binding.activeToggle.isVisible = false
             binding.objectiveReportView.isVisible = false
@@ -116,11 +142,19 @@ class ObjectivesAdapter(
         val item = items[position]
         when (holder) {
             is ObjectiveTypeViewHolder -> holder.bind(item as ObjectivesListItem.ObjectiveTypeItem)
-            is ObjectiveViewHolder -> holder.bind(item as ObjectivesListItem.ObjectiveItem)
+            is ObjectiveViewHolder -> holder.bind(
+                item as ObjectivesListItem.ObjectiveItem,
+                isLastInGroup = isLastObjectiveInGroup(position, item)
+            )
         }
     }
 
     override fun getItemCount() = items.size
+
+    private fun isLastObjectiveInGroup(position: Int, item: ObjectivesListItem.ObjectiveItem): Boolean {
+        val nextItem = items.getOrNull(position + 1)
+        return nextItem !is ObjectivesListItem.ObjectiveItem || nextItem.objectiveType != item.objectiveType
+    }
 
     companion object {
         private const val VIEW_TYPE_TYPE = 1

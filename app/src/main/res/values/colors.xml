@@ -19,4 +19,9 @@
     <color name="clinicTitleText">#3A3444</color>
     <color name="clinicMetaText">#7B8791</color>
     <color name="clinicChevronText">#9AA7B0</color>
+    <color name="objectiveGroupHeaderBackground">#EEF1F3</color>
+    <color name="objectiveGroupHeaderText">#48535A</color>
+    <color name="objectiveGroupItemBackground">#FFFFFF</color>
+    <color name="objectiveGroupDivider">#E9EFEC</color>
+    <color name="objectiveLevelYellow">#F1A208</color>
 </resources>
