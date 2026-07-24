@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import app.springdata.therapist.BaseFragment
@@ -92,12 +93,14 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun handleLoginSuccess() {
-        updateBottomNav()
         navigateToHome()
     }
 
     private fun navigateToHome() {
-        findNavController().navigate(R.id.clinicsFragment)
+        val navOptions = NavOptions.Builder()
+            .setPopUpTo(R.id.main_nav_graph, true)
+            .build()
+        findNavController().navigate(R.id.clinicsFragment, null, navOptions)
     }
 
     private fun navigateToSignUp() {

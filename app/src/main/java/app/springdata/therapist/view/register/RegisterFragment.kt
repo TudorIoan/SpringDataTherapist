@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import app.springdata.therapist.BaseFragment
@@ -155,7 +156,10 @@ class RegisterFragment : BaseFragment() {
     }
 
     private fun navigateToHome() {
-        findNavController().navigate(R.id.clinicsFragment)
+        val navOptions = NavOptions.Builder()
+            .setPopUpTo(R.id.main_nav_graph, true)
+            .build()
+        findNavController().navigate(R.id.clinicsFragment, null, navOptions)
     }
 
     private fun showLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.VISIBLE }
