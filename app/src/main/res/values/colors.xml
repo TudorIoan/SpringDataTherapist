@@ -20,6 +20,7 @@
     <color name="clinicMetaText">#7B8791</color>
     <color name="clinicChevronText">#9AA7B0</color>
     <color name="clinicChevronTextLight">#B4BEC5</color>
+    <color name="bottomNavInactive">#A8B3BD</color>
     <color name="objectiveGroupHeaderBackground">#EEF1F3</color>
     <color name="objectiveGroupHeaderText">#48535A</color>
     <color name="objectiveGroupItemBackground">#FFFFFF</color>

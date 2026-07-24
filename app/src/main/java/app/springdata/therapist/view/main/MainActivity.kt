@@ -17,7 +17,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import app.springdata.therapist.R
 import app.springdata.therapist.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,25 +74,21 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfig = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfig)
-        navController.addOnDestinationChangedListener { _, _, _ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.toolbar.post { tintToolbarNavigationIcon() }
+            updateBottomNavSelection(destination.id)
         }
         tintToolbarNavigationIcon()
+        updateBottomNavSelection(startDestinationId)
 
-        binding.bottomNavigationView.setupWithNavController(navController)
+        binding.clinicsNavItem.setOnClickListener {
+            navController.popBackStack(R.id.clinicsFragment, false)
+        }
 
-        binding.bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.clinicsFragment -> {
-                    navController.popBackStack(R.id.clinicsFragment, false)
-                    true
-                }
-                R.id.myAccountFragment -> {
-                    navController.popBackStack(R.id.clinicsFragment, false)
-                    navController.navigate(R.id.myAccountFragment)
-                    true
-                }
-                else -> false
+        binding.accountNavItem.setOnClickListener {
+            navController.popBackStack(R.id.clinicsFragment, false)
+            if (navController.currentDestination?.id != R.id.myAccountFragment) {
+                navController.navigate(R.id.myAccountFragment)
             }
         }
     }
@@ -109,6 +104,18 @@ class MainActivity : AppCompatActivity() {
         val wrappedIcon = DrawableCompat.wrap(navigationIcon.mutate())
         DrawableCompat.setTint(wrappedIcon, ContextCompat.getColor(this, android.R.color.white))
         binding.toolbar.navigationIcon = wrappedIcon
+    }
+
+    private fun updateBottomNavSelection(destinationId: Int) {
+        val selectedColor = ContextCompat.getColor(this, R.color.toolbarTeal)
+        val inactiveColor = ContextCompat.getColor(this, R.color.bottomNavInactive)
+        val clinicsSelected = destinationId == R.id.clinicsFragment
+        val accountSelected = destinationId == R.id.myAccountFragment
+
+        binding.clinicsNavIcon.setColorFilter(if (clinicsSelected) selectedColor else inactiveColor)
+        binding.clinicsNavText.setTextColor(if (clinicsSelected) selectedColor else inactiveColor)
+        binding.accountNavIcon.setColorFilter(if (accountSelected) selectedColor else inactiveColor)
+        binding.accountNavText.setTextColor(if (accountSelected) selectedColor else inactiveColor)
     }
 
     override fun onSupportNavigateUp(): Boolean {
