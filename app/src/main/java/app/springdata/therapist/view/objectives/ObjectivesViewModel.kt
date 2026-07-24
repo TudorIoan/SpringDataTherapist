@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import app.springdata.therapist.model.KidObjective
 import app.springdata.therapist.model.Objective
+import app.springdata.therapist.model.ObjectiveType
 import app.springdata.therapist.model.UserType
 import app.springdata.therapist.repo.KidObjectiveRepository
 import app.springdata.therapist.repo.ObjectiveRepository
@@ -37,6 +38,8 @@ class ObjectivesViewModel @Inject constructor(
     val objectives = mutableListOf<Objective>()
     val kidObjectives = mutableListOf<KidObjective>()
     val objectivesListItems = mutableListOf<ObjectivesListItem>()
+    private val expandedObjectiveTypes = mutableSetOf<ObjectiveType>()
+    private var expandedStateKidId: String? = null
 
     fun takeAction(action: ObjectivesAction) {
         when (action) {
@@ -64,6 +67,10 @@ class ObjectivesViewModel @Inject constructor(
 
         viewModelScope.launch {
             val kidId = orgRepo.requireSelectedKid().id
+            if (expandedStateKidId != kidId) {
+                expandedObjectiveTypes.clear()
+                expandedStateKidId = kidId
+            }
             
             Log.d("ObjectivesViewModel", "Fetching active objectives for therapist. Kid ID: $kidId")
             
@@ -91,11 +98,7 @@ class ObjectivesViewModel @Inject constructor(
                     objectivesResult.onSuccess { objectivesList ->
                         Log.d("ObjectivesViewModel", "Found ${objectivesList.size} objectives")
                         objectives.addAll(objectivesList)
-                        val objectiveTypes = objectivesList.map { it.type }.toSet()
-                        // Expand all objective types by default
-                        objectiveTypes.forEach { objectiveType ->
-                            objectivesListItems.add(ObjectivesListItem.ObjectiveTypeItem(objectiveType, expanded = false))
-                        }
+                        rebuildObjectivesListItems()
                         update(ObjectivesState.ContentLoaded(objectivesListItems))
                     }.onFailure { exception ->
                         Log.e("ObjectivesViewModel", "Error fetching objectives", exception)
@@ -114,7 +117,13 @@ class ObjectivesViewModel @Inject constructor(
         when (objectivesListItem) {
             is ObjectivesListItem.ObjectiveTypeItem -> {
                 var itemIndex = objectivesListItems.indexOfFirst { it == objectivesListItem }
-                objectivesListItems[itemIndex] = objectivesListItem.copy(expanded = !objectivesListItem.expanded)
+                val expanded = !objectivesListItem.expanded
+                if (expanded) {
+                    expandedObjectiveTypes.add(objectivesListItem.objectiveType)
+                } else {
+                    expandedObjectiveTypes.remove(objectivesListItem.objectiveType)
+                }
+                objectivesListItems[itemIndex] = objectivesListItem.copy(expanded = expanded)
                 if ((objectivesListItems[itemIndex] as ObjectivesListItem.ObjectiveTypeItem).expanded) {
                     objectives.filter { it.type == objectivesListItem.objectiveType }.forEach { objective ->
                         itemIndex ++
@@ -133,6 +142,22 @@ class ObjectivesViewModel @Inject constructor(
                 orgRepo.setSelectedObjective(objective, objectivesListItem.kidObjective)
                 update(ObjectivesState.GoToItems)
                 update(ObjectivesState.Idle)
+            }
+        }
+    }
+
+    private fun rebuildObjectivesListItems() {
+        objectivesListItems.clear()
+        objectives.map { it.type }.toSet().forEach { objectiveType ->
+            val expanded = objectiveType in expandedObjectiveTypes
+            objectivesListItems.add(ObjectivesListItem.ObjectiveTypeItem(objectiveType, expanded = expanded))
+            if (expanded) {
+                objectives.filter { it.type == objectiveType }.forEach { objective ->
+                    val kidObjective = kidObjectives.find { it.objectiveId == objective.id }
+                    if (kidObjective != null) {
+                        objectivesListItems.add(ObjectivesListItem.ObjectiveItem(kidObjective, objective.name, objective.type))
+                    }
+                }
             }
         }
     }
