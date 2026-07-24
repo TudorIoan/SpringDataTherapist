@@ -75,6 +75,25 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:navGraph="@navigation/main_nav_graph" />
 
+            <TextView
+                android:id="@+id/authOfflineInfoTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@color/offlineRed"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/no_internet_connection"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/bottomNavigationCard"
                 android:layout_width="244dp"

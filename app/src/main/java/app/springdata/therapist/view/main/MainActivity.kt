@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var connectivityManager: ConnectivityManager
+    private var currentDestinationId: Int? = null
     private val viewModel: MainViewModel by viewModels()
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
@@ -75,11 +76,15 @@ class MainActivity : AppCompatActivity() {
         val appBarConfig = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfig)
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            currentDestinationId = destination.id
             binding.toolbar.post { tintToolbarNavigationIcon() }
             updateBottomNavSelection(destination.id)
+            updateNetworkStatus()
         }
+        currentDestinationId = startDestinationId
         tintToolbarNavigationIcon()
         updateBottomNavSelection(startDestinationId)
+        updateNetworkStatus()
 
         binding.clinicsNavItem.setOnClickListener {
             navController.popBackStack(R.id.clinicsFragment, false)
@@ -154,7 +159,11 @@ class MainActivity : AppCompatActivity() {
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
 
         runOnUiThread {
-            binding.offlineInfoTextView.isVisible = !hasValidatedInternet
+            val isOffline = !hasValidatedInternet
+            val isAuthDestination = currentDestinationId == R.id.loginFragment ||
+                currentDestinationId == R.id.registerFragment
+            binding.offlineInfoTextView.isVisible = isOffline && !isAuthDestination
+            binding.authOfflineInfoTextView.isVisible = isOffline && isAuthDestination
         }
     }
 }

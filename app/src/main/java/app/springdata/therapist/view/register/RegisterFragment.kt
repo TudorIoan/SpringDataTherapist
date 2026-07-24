@@ -131,7 +131,7 @@ class RegisterFragment : BaseFragment() {
         }
 
         if (confirmPasswordError.isNotEmpty()) {
-            binding.confirmPasswordInputLayout.error = passwordError
+            binding.confirmPasswordInputLayout.error = confirmPasswordError
             binding.confirmPasswordEditText.requestFocus()
         } else {
             binding.confirmPasswordInputLayout.error = null
