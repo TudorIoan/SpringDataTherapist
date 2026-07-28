@@ -32,8 +32,6 @@ class ClinicsViewModel @Inject constructor(
         when (action) {
             is ClinicsAction.Start -> handleStart()
             is ClinicsAction.ClinicClicked -> handleClinicClicked(action.clinic)
-            is ClinicsAction.RemoveClinic -> handleRemoveClinic(action.clinic)
-            is ClinicsAction.UpdateClinicName -> handleUpdateClinicName(action.clinic)
         }
     }
 
@@ -62,14 +60,6 @@ class ClinicsViewModel @Inject constructor(
         orgRepo.setSelectedClinic(clinic)
         update(ClinicsState.GoToKids)
         update(ClinicsState.Idle)
-    }
-
-    private fun handleRemoveClinic(clinic: Clinic) {
-        update(ClinicsState.Error("Therapists cannot remove clinics."))
-    }
-
-    private fun handleUpdateClinicName(clinic: Clinic) {
-        update(ClinicsState.Error("Therapists cannot update clinics."))
     }
 
 }
