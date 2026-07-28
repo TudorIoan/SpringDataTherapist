@@ -80,6 +80,7 @@ class ItemsFragment : BaseFragment() {
 
     private fun configureViews() {
         hideBottomBar()
+        configureEmptyState()
 
         itemsAdapter = ItemsAdapter(
             onYesClicked = { item ->
@@ -110,11 +111,20 @@ class ItemsFragment : BaseFragment() {
 
     private fun handleContentLoaded(items: List<KidObjectiveItem>) {
         itemsAdapter.updateData(items)
+        binding.itemsRecyclerView.isVisible = items.isNotEmpty()
+        binding.emptyStateInclude.emptyStateView.isVisible = items.isEmpty()
+    }
+
+    private fun configureEmptyState() {
+        binding.emptyStateInclude.emptyTitleTextView.text = "No items yet"
+        binding.emptyStateInclude.emptyMessageTextView.text =
+            "Items added to this objective will appear here."
     }
 
     private fun showError(generalError: String) {
         binding.subtitleInclude.errorTextView.text = generalError
         binding.subtitleInclude.errorTextView.visibility = View.VISIBLE
+        binding.emptyStateInclude.emptyStateView.isVisible = false
     }
 
     private fun navigateToObjectives() {

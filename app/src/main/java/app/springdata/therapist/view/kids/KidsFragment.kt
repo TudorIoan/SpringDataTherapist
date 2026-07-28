@@ -84,6 +84,7 @@ class KidsFragment : BaseFragment() {
 
     private fun configureViews() {
         hideBottomBar()
+        configureEmptyState()
 
         kidsAdapter = KidsAdapter(
             onItemClicked = { kid ->
@@ -104,7 +105,15 @@ class KidsFragment : BaseFragment() {
 
     private fun handleContentLoaded(kids: List<Kid>, userType: UserType) {
         kidsAdapter.updateData(kids)
+        binding.kidsRecyclerView.isVisible = kids.isNotEmpty()
+        binding.emptyStateInclude.emptyStateView.isVisible = kids.isEmpty()
         addMenuButtons()
+    }
+
+    private fun configureEmptyState() {
+        binding.emptyStateInclude.emptyTitleTextView.text = "No kids yet"
+        binding.emptyStateInclude.emptyMessageTextView.text =
+            "Kids added to this clinic will appear here."
     }
 
     private fun addMenuButtons() {
@@ -129,6 +138,7 @@ class KidsFragment : BaseFragment() {
     private fun showError(generalError: String) {
         binding.subtitleInclude.errorTextView.text = generalError
         binding.subtitleInclude.errorTextView.visibility = View.VISIBLE
+        binding.emptyStateInclude.emptyStateView.isVisible = false
     }
 
     private fun navigateToObjectives() {

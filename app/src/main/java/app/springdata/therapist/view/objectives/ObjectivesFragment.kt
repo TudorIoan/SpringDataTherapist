@@ -78,6 +78,7 @@ class ObjectivesFragment : BaseFragment() {
 
     private fun configureViews() {
         hideBottomBar()
+        configureEmptyState()
 
         objectivesAdapter = ObjectivesAdapter(
             onItemClicked = { objectiveListItem ->
@@ -99,11 +100,20 @@ class ObjectivesFragment : BaseFragment() {
 
     private fun handleContentLoaded(objectives: List<ObjectivesListItem>) {
         objectivesAdapter.set(objectives)
+        binding.objectivesRecyclerView.isVisible = objectives.isNotEmpty()
+        binding.emptyStateInclude.emptyStateView.isVisible = objectives.isEmpty()
+    }
+
+    private fun configureEmptyState() {
+        binding.emptyStateInclude.emptyTitleTextView.text = "No objectives yet"
+        binding.emptyStateInclude.emptyMessageTextView.text =
+            "Objectives will appear here once the coordinator activates objectives for this kid."
     }
 
     private fun showError(generalError: String) {
         binding.subtitleInclude.errorTextView.text = generalError
         binding.subtitleInclude.errorTextView.visibility = View.VISIBLE
+        binding.emptyStateInclude.emptyStateView.isVisible = false
     }
 
     private fun showLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.VISIBLE }

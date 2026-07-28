@@ -67,6 +67,7 @@ class ClinicsFragment : BaseFragment() {
     private fun configureViews() {
         showTopBar()
         showBottomBar()
+        configureEmptyState()
 
         clinicsAdapter = ClinicsAdapter(
             onItemClicked = { clinic ->
@@ -84,11 +85,20 @@ class ClinicsFragment : BaseFragment() {
 
     private fun handleContentLoaded(clinics: List<Clinic>) {
         clinicsAdapter.updateData(clinics)
+        binding.clinicsRecyclerView.isVisible = clinics.isNotEmpty()
+        binding.emptyStateInclude.emptyStateView.isVisible = clinics.isEmpty()
+    }
+
+    private fun configureEmptyState() {
+        binding.emptyStateInclude.emptyTitleTextView.text = "No clinics yet"
+        binding.emptyStateInclude.emptyMessageTextView.text =
+            "Once the Coordinator will add you to a clinic it will appear here."
     }
 
     private fun showError(generalError: String) {
         binding.errorTextView.text = generalError
         binding.errorTextView.visibility = View.VISIBLE
+        binding.emptyStateInclude.emptyStateView.isVisible = false
     }
 
     private fun navigateToKids() {

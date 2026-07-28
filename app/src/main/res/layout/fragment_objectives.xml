@@ -31,6 +31,20 @@
                 android:clipToPadding="false"
                 />
 
+            <include
+                android:id="@+id/emptyStateInclude"
+                layout="@layout/view_empty_state"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="14dp"
+                app:layout_constraintBottom_toBottomOf="@id/objectivesRecyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/objectivesRecyclerView"
+                app:layout_constraintVertical_bias="0" />
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabAddObjective"
                 android:layout_width="wrap_content"
