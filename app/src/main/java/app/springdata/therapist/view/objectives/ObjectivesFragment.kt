@@ -111,9 +111,9 @@ class ObjectivesFragment : BaseFragment() {
     private fun configureEmptyState(coordinatorName: String? = null) {
         val coordinatorLabel = coordinatorName?.takeIf { it.isNotBlank() }?.let { "Coordinator $it" }
             ?: "your Coordinator"
-        binding.emptyStateInclude.emptyTitleTextView.text = "No objectives today"
+        binding.emptyStateInclude.emptyTitleTextView.text = "No more objectives today \uD83D\uDE42"
         binding.emptyStateInclude.emptyMessageTextView.text =
-            "Objectives will appear here once $coordinatorLabel activates more objectives for this kid."
+            "Either you completed your work for today or $coordinatorLabel should activate more objectives for this kid."
     }
 
     private fun showError(generalError: String) {

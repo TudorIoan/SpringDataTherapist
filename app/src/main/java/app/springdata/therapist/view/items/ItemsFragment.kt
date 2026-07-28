@@ -122,9 +122,9 @@ class ItemsFragment : BaseFragment() {
     private fun configureEmptyState(coordinatorName: String? = null) {
         val coordinatorLabel = coordinatorName?.takeIf { it.isNotBlank() }?.let { "Coordinator $it" }
             ?: "your Coordinator"
-        binding.emptyStateInclude.emptyTitleTextView.text = "No items yet"
+        binding.emptyStateInclude.emptyTitleTextView.text = "No items here \uD83D\uDE42"
         binding.emptyStateInclude.emptyMessageTextView.text =
-            "You do not have active items today 👍. $coordinatorLabel will add more items if needed."
+            "You completed these items for today. Un-mastered items will appear here tomorrow or when you have your next session 👍. $coordinatorLabel will add more items if needed."
     }
 
     private fun showError(generalError: String) {
