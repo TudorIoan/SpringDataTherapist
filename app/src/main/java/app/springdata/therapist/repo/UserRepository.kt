@@ -43,6 +43,15 @@ class UserRepository @Inject constructor(
         }
     }
 
+    suspend fun sendPasswordResetEmail(email: String): Result<Unit> {
+        return try {
+            firebaseAuth.sendPasswordResetEmail(email.trim().lowercase()).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun register(name: String, email: String, password: String, userType: UserType, isInvitedTherapist: Boolean = false): Result<Unit> {
         try {
             val authResult = firebaseAuth.createUserWithEmailAndPassword(email.trim().lowercase(), password).await()

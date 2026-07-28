@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -51,6 +52,7 @@ class LoginFragment : BaseFragment() {
                 is LoginState.Error -> handleError(it.generalError, it.emailError, it.passwordError)
                 is LoginState.Idle -> {}
                 is LoginState.LoginSuccess -> handleLoginSuccess()
+                is LoginState.PasswordResetEmailSent -> handlePasswordResetEmailSent()
             }
         }
         viewModel.state.observe(viewLifecycleOwner, stateObserver)
@@ -66,6 +68,10 @@ class LoginFragment : BaseFragment() {
 
         binding.loginButton.setOnClickListener {
             viewModel.takeAction(LoginAction.LoginClicked(binding.emailEditText.text.toString().trim(), binding.passwordEditText.text.toString().trim()))
+        }
+
+        binding.forgotPasswordButton.setOnClickListener {
+            viewModel.takeAction(LoginAction.ForgotPasswordClicked(binding.emailEditText.text.toString().trim()))
         }
     }
 
@@ -94,6 +100,13 @@ class LoginFragment : BaseFragment() {
 
     private fun handleLoginSuccess() {
         navigateToHome()
+    }
+
+    private fun handlePasswordResetEmailSent() {
+        binding.errorTextView.visibility = View.GONE
+        binding.emailInputLayout.error = null
+        binding.passwordInputLayout.error = null
+        Toast.makeText(requireContext(), "Password reset email sent", Toast.LENGTH_SHORT).show()
     }
 
     private fun navigateToHome() {
