@@ -32,6 +32,9 @@ class ItemsViewModel @Inject constructor(
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
+    private val _coordinatorName = MutableLiveData<String>()
+    val coordinatorName: LiveData<String> = _coordinatorName
+
     var items: List<KidObjectiveItem> = listOf()
 
     fun takeAction(action: ItemAction) {
@@ -59,6 +62,11 @@ class ItemsViewModel @Inject constructor(
     private fun handleStart() {
         _title.value =
             "${orgRepo.requireSelectedKid().name} → ${orgRepo.requireSelectedObjective().name}"
+
+        viewModelScope.launch {
+            userRepo.fetchUserDetails(orgRepo.requireSelectedClinic().ownerUid)
+                .onSuccess { _coordinatorName.value = it.name }
+        }
 
         updateItems()
     }

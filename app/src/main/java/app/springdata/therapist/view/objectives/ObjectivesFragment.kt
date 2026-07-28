@@ -74,6 +74,10 @@ class ObjectivesFragment : BaseFragment() {
         viewModel.userType.observe(viewLifecycleOwner) { userType ->
             binding.fabAddObjective.isVisible = false
         }
+
+        viewModel.coordinatorName.observe(viewLifecycleOwner) {
+            configureEmptyState(it)
+        }
     }
 
     private fun configureViews() {
@@ -104,10 +108,12 @@ class ObjectivesFragment : BaseFragment() {
         binding.emptyStateInclude.emptyStateView.isVisible = objectives.isEmpty()
     }
 
-    private fun configureEmptyState() {
-        binding.emptyStateInclude.emptyTitleTextView.text = "No objectives yet"
+    private fun configureEmptyState(coordinatorName: String? = null) {
+        val coordinatorLabel = coordinatorName?.takeIf { it.isNotBlank() }?.let { "Coordinator $it" }
+            ?: "your Coordinator"
+        binding.emptyStateInclude.emptyTitleTextView.text = "No objectives today"
         binding.emptyStateInclude.emptyMessageTextView.text =
-            "Objectives will appear here once the coordinator activates objectives for this kid."
+            "Objectives will appear here once $coordinatorLabel activates more objectives for this kid."
     }
 
     private fun showError(generalError: String) {

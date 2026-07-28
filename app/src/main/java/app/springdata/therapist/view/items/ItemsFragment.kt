@@ -76,6 +76,10 @@ class ItemsFragment : BaseFragment() {
             binding.subtitleInclude.subtitleTextView.isVisible = true
             binding.subtitleInclude.subtitleTextView.text = title
         }
+
+        viewModel.coordinatorName.observe(viewLifecycleOwner) {
+            configureEmptyState(it)
+        }
     }
 
     private fun configureViews() {
@@ -115,10 +119,12 @@ class ItemsFragment : BaseFragment() {
         binding.emptyStateInclude.emptyStateView.isVisible = items.isEmpty()
     }
 
-    private fun configureEmptyState() {
+    private fun configureEmptyState(coordinatorName: String? = null) {
+        val coordinatorLabel = coordinatorName?.takeIf { it.isNotBlank() }?.let { "Coordinator $it" }
+            ?: "your Coordinator"
         binding.emptyStateInclude.emptyTitleTextView.text = "No items yet"
         binding.emptyStateInclude.emptyMessageTextView.text =
-            "Items added to this objective will appear here."
+            "You do not have active items today 👍. $coordinatorLabel will add more items if needed."
     }
 
     private fun showError(generalError: String) {

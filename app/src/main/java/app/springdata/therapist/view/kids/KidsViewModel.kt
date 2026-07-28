@@ -51,6 +51,9 @@ class KidsViewModel @Inject constructor(
     private val _userType = MutableLiveData<UserType>()
     val userType: LiveData<UserType> = _userType
 
+    private val _coordinatorName = MutableLiveData<String>()
+    val coordinatorName: LiveData<String> = _coordinatorName
+
     val kidsList = mutableListOf<Kid>()
 
     fun takeAction(action: KidsAction) {
@@ -74,6 +77,9 @@ class KidsViewModel @Inject constructor(
 
         update(KidsState.Loading)
         viewModelScope.launch {
+            userRepo.fetchUserDetails(orgRepo.requireSelectedClinic().ownerUid)
+                .onSuccess { _coordinatorName.value = it.name }
+
             val result = kidRepo.fetchAllKidsForClinicAndTherapist(orgRepo.requireSelectedClinic().id, userRepo.requireUserDetails().ownerUid)
             result.onSuccess {
                 kidsList.clear()

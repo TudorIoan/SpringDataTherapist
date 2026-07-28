@@ -80,6 +80,10 @@ class KidsFragment : BaseFragment() {
         viewModel.userType.observe(viewLifecycleOwner) { userType ->
             binding.fabAddKid.isVisible = false
         }
+
+        viewModel.coordinatorName.observe(viewLifecycleOwner) {
+            configureEmptyState(it)
+        }
     }
 
     private fun configureViews() {
@@ -110,10 +114,12 @@ class KidsFragment : BaseFragment() {
         addMenuButtons()
     }
 
-    private fun configureEmptyState() {
+    private fun configureEmptyState(coordinatorName: String? = null) {
+        val coordinatorLabel = coordinatorName?.takeIf { it.isNotBlank() }?.let { "Coordinator $it" }
+            ?: "your Coordinator"
         binding.emptyStateInclude.emptyTitleTextView.text = "No kids yet"
         binding.emptyStateInclude.emptyMessageTextView.text =
-            "Kids added to this clinic will appear here."
+            "Kids added by $coordinatorLabel to this clinic will appear here."
     }
 
     private fun addMenuButtons() {

@@ -92,7 +92,7 @@ class ClinicsFragment : BaseFragment() {
     private fun configureEmptyState() {
         binding.emptyStateInclude.emptyTitleTextView.text = "No clinics yet"
         binding.emptyStateInclude.emptyMessageTextView.text =
-            "Once the Coordinator will add you to a clinic it will appear here."
+            "Once your Coordinator adds you to a clinic it will appear here."
     }
 
     private fun showError(generalError: String) {

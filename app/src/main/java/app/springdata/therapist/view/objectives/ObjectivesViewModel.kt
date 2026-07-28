@@ -35,6 +35,9 @@ class ObjectivesViewModel @Inject constructor(
     private val _userType = MutableLiveData<UserType>()
     val userType: LiveData<UserType> = _userType
 
+    private val _coordinatorName = MutableLiveData<String>()
+    val coordinatorName: LiveData<String> = _coordinatorName
+
     val objectives = mutableListOf<Objective>()
     val kidObjectives = mutableListOf<KidObjective>()
     val objectivesListItems = mutableListOf<ObjectivesListItem>()
@@ -66,6 +69,9 @@ class ObjectivesViewModel @Inject constructor(
         objectivesListItems.clear()
 
         viewModelScope.launch {
+            userRepo.fetchUserDetails(orgRepo.requireSelectedClinic().ownerUid)
+                .onSuccess { _coordinatorName.value = it.name }
+
             val kidId = orgRepo.requireSelectedKid().id
             if (expandedStateKidId != kidId) {
                 expandedObjectiveTypes.clear()
