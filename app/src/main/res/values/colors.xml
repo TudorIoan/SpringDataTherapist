@@ -4,11 +4,9 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="green">#32a852</color>
     <color name="offlineRed">#D7726B</color>
     <color name="offlineRedInset">#C8655F</color>
     <color name="offlineRedOutlineDark">#B15853</color>
-    <color name="offlineRedOutlineLight">#E2857E</color>
     <color name="offlineRedText">#FFF0EE</color>
     <color name="offlineRedTextShadow">#82312D</color>
     <color name="toolbarTeal">#39B8A8</color>
@@ -17,7 +15,6 @@
     <color name="toolbarTealInset">#319D91</color>
     <color name="toolbarTealOutlineDark">#30988C</color>
     <color name="toolbarTextMuted">#236B64</color>
-    <color name="screenBackground">#F7F8FA</color>
     <color name="clinicScreenBackground">#F8F5FA</color>
     <color name="clinicCardBackground">#FFFFFF</color>
     <color name="clinicCardStroke">#ECE7EF</color>
@@ -32,11 +29,9 @@
     <color name="objectiveGroupItemBackground">#FFFFFF</color>
     <color name="objectiveGroupDivider">#E9EFEC</color>
     <color name="objectiveLevelYellow">#F1A208</color>
-    <color name="itemActionTrayBackground">#F3F6F7</color>
     <color name="itemInputBackground">#FFFFFF</color>
     <color name="itemInputStroke">#D9E0E3</color>
     <color name="itemYesGreen">#54A866</color>
     <color name="itemNoRed">#D75B55</color>
     <color name="itemSetBlue">#35B8A8</color>
-    <color name="itemSetPurple">#A62AB7</color>
 </resources>
