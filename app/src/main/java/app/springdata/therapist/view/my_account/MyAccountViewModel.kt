@@ -3,9 +3,11 @@ package app.springdata.therapist.view.my_account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import app.springdata.therapist.model.UserType
 import app.springdata.therapist.repo.UserRepository
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,7 +19,9 @@ class MyAccountViewModel @Inject constructor(private val userRepo: UserRepositor
     fun takeAction(action: MyAccountAction) {
         when (action) {
             is MyAccountAction.Start -> handleStart()
-            is MyAccountAction.LogoutClicked -> handleLogoutClicked()        }
+            is MyAccountAction.LogoutClicked -> handleLogoutClicked()
+            is MyAccountAction.SendFeedbackClicked -> handleSendFeedbackClicked(action.message)
+        }
     }
 
     private fun update(newState: MyAccountState) {
@@ -32,5 +36,19 @@ class MyAccountViewModel @Inject constructor(private val userRepo: UserRepositor
     private fun handleLogoutClicked() {
         userRepo.logout()
         update(MyAccountState.LogoutDone)
+    }
+
+    private fun handleSendFeedbackClicked(message: String) {
+        if (message.isBlank()) {
+            update(MyAccountState.FeedbackValidationError("Please write a short message first."))
+            return
+        }
+
+        update(MyAccountState.Loading)
+        viewModelScope.launch {
+            userRepo.sendTherapistFeedback(message)
+                .onSuccess { update(MyAccountState.FeedbackSent) }
+                .onFailure { update(MyAccountState.Error(it.message ?: "Unable to send feedback.")) }
+        }
     }
 }

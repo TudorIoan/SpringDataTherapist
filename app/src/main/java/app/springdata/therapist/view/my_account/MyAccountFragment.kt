@@ -1,9 +1,12 @@
 package app.springdata.therapist.view.my_account
 
 import android.os.Bundle
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -33,9 +36,21 @@ class MyAccountFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
     private fun configureViews() {
         binding.logoutButton.setOnClickListener {
             viewModel.takeAction(MyAccountAction.LogoutClicked)
+        }
+        binding.feedbackFab.setOnClickListener {
+            showFeedbackInput()
+        }
+        binding.sendFeedbackButton.setOnClickListener {
+            binding.feedbackInputLayout.error = null
+            viewModel.takeAction(MyAccountAction.SendFeedbackClicked(binding.feedbackEditText.text.toString()))
         }
     }
 
@@ -57,9 +72,13 @@ class MyAccountFragment : BaseFragment() {
                 is MyAccountState.Content -> {
                     handleContent(it.name, it.email, it.userType)
                 }
+                is MyAccountState.FeedbackValidationError -> {
+                    binding.feedbackInputLayout.error = it.messageError
+                }
 
                 MyAccountState.Idle -> {}
                 MyAccountState.LogoutDone -> handleLogoutDone()
+                MyAccountState.FeedbackSent -> handleFeedbackSent()
             }
         }
         viewModel.state.observe(viewLifecycleOwner, stateObserver)
@@ -70,6 +89,7 @@ class MyAccountFragment : BaseFragment() {
         binding.nameTextView.text = name
         binding.emailTextView.text = email
         binding.roleTextView.text = userType.name.lowercase(Locale.getDefault()).capitalizeFirst()
+        binding.feedbackLabel.text = getFeedbackMessage(name)
     }
 
     private fun handleLogoutDone() {
@@ -77,6 +97,39 @@ class MyAccountFragment : BaseFragment() {
             .setPopUpTo(R.id.main_nav_graph, true)
             .build()
         findNavController().navigate(R.id.loginFragment, null, navOptions)
+    }
+
+    private fun showFeedbackInput() {
+        binding.feedbackContainer.visibility = View.VISIBLE
+        binding.feedbackFab.hide()
+        binding.feedbackEditText.requestFocus()
+        scrollToFeedback()
+
+        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(binding.feedbackEditText, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun handleFeedbackSent() {
+        binding.feedbackInputLayout.error = null
+        binding.feedbackEditText.text?.clear()
+        hideKeyboard()
+        Toast.makeText(requireContext(), "Thanks, we really appreciate it.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun scrollToFeedback() {
+        binding.accountScrollView.post {
+            binding.accountScrollView.smoothScrollTo(0, binding.feedbackContainer.bottom)
+        }
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.feedbackEditText.windowToken, 0)
+        binding.feedbackEditText.clearFocus()
+    }
+
+    private fun getFeedbackMessage(name: String): String {
+        return "Hey $name, send us some feedback 🤗. We’re a friendly small group and would love to hear what’s good, and especially what’s bad, so we can make the app more useful for you. We’ll reply by email quickly. 🙏"
     }
 
     private fun showLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.VISIBLE }

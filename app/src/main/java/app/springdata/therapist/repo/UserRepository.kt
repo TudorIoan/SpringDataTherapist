@@ -52,6 +52,25 @@ class UserRepository @Inject constructor(
         }
     }
 
+    suspend fun sendTherapistFeedback(message: String): Result<Unit> {
+        val email = userDetails?.email ?: firebaseAuth.currentUser?.email
+            ?: return Result.failure(Exception("Unable to find your email for feedback."))
+
+        return try {
+            firestore.collection("therapist_feedback")
+                .add(
+                    mapOf(
+                        "email" to email,
+                        "message" to message.trim()
+                    )
+                )
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun register(name: String, email: String, password: String, userType: UserType, isInvitedTherapist: Boolean = false): Result<Unit> {
         try {
             val authResult = firebaseAuth.createUserWithEmailAndPassword(email.trim().lowercase(), password).await()
