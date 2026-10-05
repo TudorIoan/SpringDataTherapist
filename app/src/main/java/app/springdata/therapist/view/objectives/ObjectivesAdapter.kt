@@ -101,7 +101,6 @@ class ObjectivesAdapter(
             binding.separator.isVisible = !isLastInGroup
 
             binding.activeToggle.isVisible = false
-            binding.objectiveReportView.isVisible = false
             binding.buttonsLayout.root.isVisible = false
 
             binding.root.setOnClickListener {

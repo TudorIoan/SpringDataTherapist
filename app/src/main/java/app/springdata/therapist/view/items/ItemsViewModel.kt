@@ -52,7 +52,6 @@ class ItemsViewModel @Inject constructor(
             is ItemAction.ProgressSet -> handleProgressSet(action.item, action.progress)
             is ItemAction.CheckmarkClicked -> handleCheckmarkClicked(action.item)
         }
-
     }
 
     private fun update(newState: ItemState) {
