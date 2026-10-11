@@ -28,4 +28,9 @@
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
+    <style name="FeedbackButtonShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/icon_corner_radius</item>
+    </style>
+
 </resources>
