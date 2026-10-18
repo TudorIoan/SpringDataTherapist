@@ -117,8 +117,8 @@ class ObjectivesFragment : BaseFragment() {
     }
 
     private fun showError(generalError: String) {
-        binding.subtitleInclude.errorTextView.text = generalError
-        binding.subtitleInclude.errorTextView.visibility = View.VISIBLE
+        binding.errorTextView.text = generalError
+        binding.errorTextView.visibility = View.VISIBLE
         binding.emptyStateInclude.emptyStateView.isVisible = false
     }
 

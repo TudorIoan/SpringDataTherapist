@@ -63,8 +63,8 @@ class CoordinatorFragment : BaseFragment() {
     }
 
     private fun showError(generalError: String) {
-        binding.subtitleInclude.errorTextView.text = generalError
-        binding.subtitleInclude.errorTextView.visibility = View.VISIBLE
+        binding.errorTextView.text = generalError
+        binding.errorTextView.visibility = View.VISIBLE
     }
 
     private fun showLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.VISIBLE }

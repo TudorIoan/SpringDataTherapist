@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="subtitleTextView,sectionTitleTextView,errorTextView" />
+        app:constraint_referenced_ids="subtitleTextView,sectionTitleTextView" />
 
     <View
         android:id="@+id/bottomDivider"
@@ -66,20 +66,4 @@
         app:layout_constraintTop_toBottomOf="@id/contentBottomBarrier"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <TextView
-        android:id="@+id/errorTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="28dp"
-        android:text=""
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sectionTitleTextView"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>

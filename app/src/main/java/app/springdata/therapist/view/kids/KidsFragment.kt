@@ -108,6 +108,7 @@ class KidsFragment : BaseFragment() {
     }
 
     private fun handleContentLoaded(kids: List<Kid>, userType: UserType) {
+        binding.kidsErrorTextView.isVisible = false
         kidsAdapter.updateData(kids)
         binding.kidsRecyclerView.isVisible = kids.isNotEmpty()
         binding.emptyStateInclude.emptyStateView.isVisible = kids.isEmpty()
@@ -142,8 +143,8 @@ class KidsFragment : BaseFragment() {
     }
 
     private fun showError(generalError: String) {
-        binding.subtitleInclude.errorTextView.text = generalError
-        binding.subtitleInclude.errorTextView.visibility = View.VISIBLE
+        binding.kidsErrorTextView.text = generalError
+        binding.kidsErrorTextView.visibility = View.VISIBLE
         binding.emptyStateInclude.emptyStateView.isVisible = false
     }
 
@@ -189,7 +190,10 @@ class KidsFragment : BaseFragment() {
         }
     }
 
-    private fun showLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.VISIBLE }
+    private fun showLoading() {
+        binding.kidsErrorTextView.isVisible = false
+        binding.loadingViewInclude.loadingView.isVisible = true
+    }
 
     private fun hideLoading() = binding.loadingViewInclude.loadingView.apply { visibility = View.GONE }
 
