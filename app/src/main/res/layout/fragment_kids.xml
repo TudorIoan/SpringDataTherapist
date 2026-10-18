@@ -18,20 +18,13 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
+            style="@style/ErrorBanner"
                 android:id="@+id/kidsErrorTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_login_error"
-                android:paddingStart="12dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="10dp"
-                android:textColor="@color/offlineRed"
-                android:textSize="13sp"
-                android:textStyle="bold"
                 android:accessibilityLiveRegion="polite"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
